@@ -16,6 +16,7 @@ const useStyles = makeStyles(() => ({
     body: {
         minHeight: '100vh',
         width: '70%',
+        maxWidth: '1300px',
         margin: '80px auto'
     },
     slider: {
