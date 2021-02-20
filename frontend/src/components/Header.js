@@ -35,7 +35,11 @@ const useStyles = makeStyles(() => ({
     },
     navItems: {
         color: '#fff',
-        padding: '0 15px'
+        padding: '0 15px',
+        textDecoration: 'none',
+        '&:hover': {
+            color: 'orange'
+        }
     },
     buttonCont: {
         margin: '0 5px',
