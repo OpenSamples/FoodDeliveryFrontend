@@ -31,12 +31,12 @@ function createData(firstName, lastName, email, emailIsVerified) {
 }
 
 const rows = [
-  createData("Dino", "Karahmetovic", "dk@mail.com", "true"),
-  createData("Nikola", "Jovovic", "nj@mail.com", "true"),
-  createData("Ivana", "Bjelobaba", "ib@mail.com", "true"),
+  createData("Dino", "K.", "dk@mail.com", "true"),
+  createData("Nikola", "J.", "nj@mail.com", "true"),
+  createData("Ivana", "B.", "ib@mail.com", "true"),
 ];
 
-const AdminDashboard = () => {
+const AdminEditUsers = () => {
   const classes = useStyles();
 
   const [state, setState] = useState({
@@ -98,4 +98,4 @@ const AdminDashboard = () => {
   );
 };
 
-export default AdminDashboard;
+export default AdminEditUsers;

@@ -8,7 +8,7 @@ import Menu from './containers/Menu'
 import About from './containers/About'
 import Contact from './containers/Contact'
 import SingleProduct from './containers/SingleProduct'
-import AdminDashboard from "./containers/AdminDashboard";
+import AdminEditUsers from "./containers/AdminEditUsers";
 
 function App() {
   
@@ -22,7 +22,7 @@ function App() {
       <Route path="/about" component={About} />
       <Route path="/contact" component={Contact} />
       <Route path="/product/:id" component={SingleProduct} />
-      <Route path="/admin-dashboard" component={AdminDashboard} />
+      <Route path="/admin-edit-users" component={AdminEditUsers} />
     </>
   );
 }
