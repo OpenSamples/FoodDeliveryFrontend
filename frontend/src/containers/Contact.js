@@ -8,7 +8,7 @@ import { TextField, Button, Typography } from '@material-ui/core';
 const useStyles = makeStyles(() => ({
     root: {
         width: '100%',
-        minHeight: '90vh',
+        minHeight: '100vh',
         display: 'flex',
         justifyContent: 'center'
     },
