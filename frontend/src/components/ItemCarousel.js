@@ -9,17 +9,30 @@ const useStyles = makeStyles(() => ({
     },
     photo: {
         width: '100%',
-        height: '300px'
+        height: '300px',
+        backgroundSize: 'cover !important'
+    },
+    singlePage: {
+        width: '100%',
+        maxHeight: '100%'
+    },
+    paper: {
+        width: '100%',
+        height: '100%',
+        display: 'flex',
+        alignItems: 'center'
     }
 }))
 
 const Item = (props) => {
     const classes = useStyles()
 
+    const classNames = props.singlePage ? classes.singlePage : classes.photo
+
     return (
-        <Paper>
+        <Paper className={classes.paper}>
             <Button className={classes.button}>
-                <img src={props.src} alt={props.name} className={classes.photo} />
+                <img src={props.src} alt={props.name} className={classNames} />
             </Button>
         </Paper>
     )
