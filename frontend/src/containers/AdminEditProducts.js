@@ -46,7 +46,7 @@ export default function AdminEditProducts() {
     <>
       <Header />
       <div className={classes.body}>
-        <Typography className={classes.textColor}>Edit products:</Typography>
+        <Typography className={classes.textColor}>Edit Products:</Typography>
 
         <TableContainer component={Paper}>
           <Table className={classes.table} aria-label="simple table">

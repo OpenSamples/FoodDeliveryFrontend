@@ -26,17 +26,17 @@ const useStyles = makeStyles(() => ({
     margin: "5px",
   },
 }));
-function createData(firstName, lastName, email, emailIsVerified) {
-  return { firstName, lastName, email, emailIsVerified };
+function createData(name, imagePath) {
+  return { name, imagePath };
 }
 
 const rows = [
-  createData("Dino", "K.", "dk@mail.com", "true"),
-  createData("Nikola", "J.", "nj@mail.com", "true"),
-  createData("Ivana", "B.", "ib@mail.com", "true"),
+  createData("Meals", "/images/categories/meals.jpg"),
+  createData("Deals", "/images/categories/deals.jpg"),
+  createData("Deserts", "/images/categories/deserts.jpg"),
 ];
 
-const AdminEditUsers = () => {
+export default function AdminEditCategories() {
   const classes = useStyles();
 
   const [state, setState] = useState({
@@ -47,27 +47,23 @@ const AdminEditUsers = () => {
     <>
       <Header />
       <div className={classes.body}>
-        <Typography className={classes.textColor}>Edit Users:</Typography>
+        <Typography className={classes.textColor}>Edit Categories:</Typography>
 
         <TableContainer component={Paper}>
           <Table className={classes.table} aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell>First Name</TableCell>
-                <TableCell align="right">Last Name</TableCell>
-                <TableCell align="right">Email</TableCell>
-                <TableCell align="right">Email is Verified</TableCell>
+                <TableCell>Name</TableCell>
+                <TableCell align="right">Image Path</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {rows.map((row) => (
                 <TableRow key={row.name}>
                   <TableCell component="th" scope="row">
-                    {row.firstName}
+                    {row.name}
                   </TableCell>
-                  <TableCell align="right">{row.lastName}</TableCell>
-                  <TableCell align="right">{row.email}</TableCell>
-                  <TableCell align="right">{row.emailIsVerified}</TableCell>
+                  <TableCell align="right">{row.imagePath}</TableCell>
                   <TableCell align="right">
                     <Button
                       type="submit"
@@ -96,6 +92,4 @@ const AdminEditUsers = () => {
       <Footer />
     </>
   );
-};
-
-export default AdminEditUsers;
+}
