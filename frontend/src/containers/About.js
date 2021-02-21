@@ -7,13 +7,10 @@ import { TextField, Button, Typography } from '@material-ui/core';
 import CardAboutUs from '../components/CardAboutUs'
 
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
-        minHeight: '100vh',
-        display: 'flex',
-        flexDirection: "column",
-        justifyContent: 'center'
+        minHeight: '100vh'
     },
     about_us_top: {
         backgroundColor: "#5c5fed",
@@ -22,7 +19,8 @@ const useStyles = makeStyles(() => ({
         justifyContent: "center",
         alignItems: "center",
         padding: "2%",
-        color: "white"
+        color: "white",
+        marginBottom: theme.spacing(4)
     },
     about_us_cards: {
         padding: "30px",
@@ -47,7 +45,6 @@ const About = () => {
                     <CardAboutUs init="IB" fullName="Ivana Bjelobaba" location="Podgorica,Montenegro" desc="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s" />
                     <CardAboutUs init="DK" fullName="Dino Karahmetovic" location="Podgorica,Montenegro" desc="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s" />
                 </div>
-                <div style={{ minHeight: '100vh' }}></div>
             </div>
             <Footer />
         </>
