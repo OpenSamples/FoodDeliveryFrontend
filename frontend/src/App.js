@@ -7,6 +7,7 @@ import EditProfile from './containers/EditProfile'
 import Menu from './containers/Menu'
 import About from './containers/About'
 import Contact from './containers/Contact'
+import AdminDashboard from "./containers/AdminDashboard";
 
 function App() {
   
@@ -19,6 +20,7 @@ function App() {
       <Route path="/menu" component={Menu} />
       <Route path="/about" component={About} />
       <Route path="/contact" component={Contact} />
+      <Route path="/admin-dashboard" component={AdminDashboard} />
     </>
   );
 }
