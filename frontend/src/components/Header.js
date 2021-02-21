@@ -103,7 +103,9 @@ const Header = (props) => {
                 <IconButton
                     color="inherit"
                 >
-                    <ShoppingCartIcon />
+                    <Link className={classes.colorWhite} to="/shopping-cart">
+                        <ShoppingCartIcon />
+                    </Link>
                 </IconButton>
                 <IconButton
                     aria-controls="menu-appbar"
