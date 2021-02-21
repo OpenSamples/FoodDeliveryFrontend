@@ -15,33 +15,44 @@ const useStyles = makeStyles(() => ({
     container: {
         width: '100%',
         // border: '1px solid #ccc',
-        padding: '2rem'
+        padding: '2rem',
+        display: 'flex',
+        flexDirection: 'column',
+        '& h2': {
+            color: 'rgba(0, 0, 0, 0.54)'
+        }
     },
     placeOrderBtn: {
-        float: 'right'
+        alignSelf: 'flex-end',
+        marginTop: '2em'
+    },
+    noItems: {
+        color: 'rgba(0, 0, 0, 0.54)',
+        fontSize: '1.3rem',
+        margin: '0 auto'
     }
 }))
 
 const items = [
     {
         name: 'Product 1',
-        details: 'Details about product 1',
+        details: 'Details for product 1',
         qty: 2,
-        price: 12,
+        price: 14,
         thumbnail: photo1
     },
     {
         name: 'Product 2',
-        details: 'Details about product 2',
-        qty: 1,
-        price: 7,
+        details: 'Details for product 2',
+        qty: 5,
+        price: 10,
         thumbnail: photo1
     },
     {
         name: 'Product 3',
-        details: 'Details about product 3',
-        qty: 5,
-        price: 8,
+        details: 'Details for product 3',
+        qty: 1,
+        price: 4,
         thumbnail: photo1
     }
 ]
@@ -49,17 +60,38 @@ const items = [
 const ShoppingCart = () => {
     const classes = useStyles()
 
-    const [state, setState] = React.useState({qty: 3})
+    const [state, setState] = React.useState({
+        qty: 3,
+        itemsInCart: items.length
+    })
+
+    let itemsCards = () => (
+        <></>
+    )
+
+    let title = "Your Shopping Cart Items:"
+
+    if(state.itemsInCart) {
+        itemsCards = () => (
+            items.map((item, i) => (
+                <ShoppingCartItem state={state} setState={setState} key={i} name={item.name} details={item.details} qty={item.qty} price={item.price} thumbnail={item.thumbnail} />
+            ))
+        )
+    } else {
+        itemsCards = () => (
+            <p className={classes.noItems}>No items in your shopping cart...</p>
+        )
+        title = ""
+    }
 
     return (
         <>
             <Header />
             <div className={classes.root}>
                 <div className={classes.container}>
-                    {items.map((item, i) => (
-                        <ShoppingCartItem state={state} setState={setState} key={i} name={item.name} details={item.details} qty={item.qty} price={item.price} thumbnail={item.thumbnail} />
-                    ))}
-                    <Button variant="outlined" color="primary" className={classes.placeOrderBtn}>Place order</Button>
+                    <h2>{title}</h2>
+                    {itemsCards()}
+                    <Button disabled={state.itemsInCart ? false : true} variant="outlined" color="primary" className={classes.placeOrderBtn}>Place order</Button>
                 </div>
             </div>
             <Footer />

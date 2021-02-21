@@ -66,7 +66,7 @@ const ShoppingCartItem = props => {
                         <IconButton onClick={increaseQty(-1)}>
                             <Remove />
                         </IconButton>
-                        <span>{'   ' + props.state.qty + '   '}</span>
+                        <span>{'   ' + props.qty + '   '}</span>
                         <IconButton onClick={increaseQty(1)}>
                             <Add />
                         </IconButton>
