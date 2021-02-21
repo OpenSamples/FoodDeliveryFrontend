@@ -11,6 +11,7 @@ import SingleProduct from "./containers/SingleProduct";
 import AdminEditUsers from "./containers/AdminEditUsers";
 import AdminEditProducts from "./containers/AdminEditProducts";
 import AdminEditCategories from "./containers/AdminEditCategories";
+import AdminStatistics from "./containers/AdminStatistics";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
       <Route path="/admin-edit-users" component={AdminEditUsers} />
       <Route path="/admin-edit-products" component={AdminEditProducts} />
       <Route path="/admin-edit-categories" component={AdminEditCategories} />
+      <Route path="/admin-stats" component={AdminStatistics} />
     </>
   );
 }
