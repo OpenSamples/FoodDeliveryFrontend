@@ -8,6 +8,7 @@ import Menu from './containers/Menu'
 import About from './containers/About'
 import Contact from './containers/Contact'
 import SingleProduct from './containers/SingleProduct'
+import ShoppingCart from './containers/ShoppingCart'
 
 function App() {
   
@@ -21,6 +22,7 @@ function App() {
       <Route path="/about" component={About} />
       <Route path="/contact" component={Contact} />
       <Route path="/product/:id" component={SingleProduct} />
+      <Route path="/shopping-cart" component={ShoppingCart} />
     </>
   );
 }
