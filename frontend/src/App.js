@@ -9,6 +9,7 @@ import About from './containers/About'
 import Contact from './containers/Contact'
 import SingleProduct from './containers/SingleProduct'
 import AdminEditUsers from "./containers/AdminEditUsers";
+import AdminEditProducts from "./containers/AdminEditProducts";
 
 function App() {
   
@@ -23,6 +24,7 @@ function App() {
       <Route path="/contact" component={Contact} />
       <Route path="/product/:id" component={SingleProduct} />
       <Route path="/admin-edit-users" component={AdminEditUsers} />
+      <Route path="/admin-edit-products" component={AdminEditProducts} />
     </>
   );
 }
