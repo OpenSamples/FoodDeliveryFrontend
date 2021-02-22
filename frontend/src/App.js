@@ -16,6 +16,8 @@ import AdminEditCategories from "./containers/AdminEditCategories";
 import AdminStatistics from "./containers/AdminStatistics";
 import PlaceOrder from './containers/PlaceOrder'
 import TwoStep from './containers/TwoStep'
+import ChangePassword from './containers/ChangePassword'
+
 
 
 function App() {
@@ -36,6 +38,7 @@ function App() {
       <Route path="/admin-stats" component={AdminStatistics} />
       <Route path="/place-order" component={PlaceOrder} />
       <Route path="/two-step-verification" component={TwoStep} />
+      <Route path="/change-password" component={ChangePassword} />
     </>
   );
 }
