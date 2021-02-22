@@ -13,7 +13,7 @@ import ShoppingCart from './containers/ShoppingCart';
 import PlaceOrder from './containers/PlaceOrder'
 import TwoStep from './containers/TwoStep'
 import AdminDashboard from './containers/AdminDashboard'
-import ChangePassword from './containers/ChangePassword'
+import ForgotPassword from './containers/ForgotPassword'
 
 
 function App() {
@@ -31,7 +31,7 @@ function App() {
       <Route path="/place-order" component={PlaceOrder} />
       <Route path="/two-step-verification" component={TwoStep} />
       <Route path={["/admin-dashboard/:page", "/admin-dashboard"]} component={AdminDashboard} />
-      <Route path="/change-password" component={ChangePassword} />
+      <Route path="/forgot-password" component={ForgotPassword} />
     </>
   );
 }

@@ -148,16 +148,16 @@ const Header = (props) => {
     const loggedOut = () => {
         return (
             <>
-                <Button className={classes.buttonCont} startIcon={<PersonIcon className={classes.colorWhite} />}>
-                    <Link to="/login" className={classes.button}>
-                        Login
-                    </Link>
-                </Button>
-                <Button className={classes.buttonCont} startIcon={<PersonAddIcon className={classes.colorWhite} />}>
-                    <Link to="/register" className={classes.button}>
-                        Signup
-                    </Link>
-                </Button>
+                <Link to="/login" className={classes.button}>
+                    <Button className={`${classes.buttonCont} ${classes.colorWhite}`} startIcon={<PersonIcon className={classes.colorWhite} />}>
+                            Login
+                    </Button>
+                </Link>
+                <Link to="/register" className={classes.button}>
+                    <Button className={`${classes.buttonCont} ${classes.colorWhite}`} startIcon={<PersonAddIcon className={classes.colorWhite} />}>
+                            Signup
+                    </Button>
+                </Link>
             </>
         )
     }
