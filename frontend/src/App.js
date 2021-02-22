@@ -14,6 +14,7 @@ import AdminEditUsers from "./containers/AdminEditUsers";
 import AdminEditProducts from "./containers/AdminEditProducts";
 import AdminEditCategories from "./containers/AdminEditCategories";
 import AdminStatistics from "./containers/AdminStatistics";
+import PlaceOrder from './containers/PlaceOrder'
 
 
 function App() {
@@ -32,6 +33,7 @@ function App() {
       <Route path="/admin-edit-products" component={AdminEditProducts} />
       <Route path="/admin-edit-categories" component={AdminEditCategories} />
       <Route path="/admin-stats" component={AdminStatistics} />
+      <Route path="/place-order" component={PlaceOrder} />
     </>
   );
 }

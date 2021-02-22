@@ -20,7 +20,7 @@ const useStyles = makeStyles(() => ({
     padding: "50px",
     height: "50%",
     paddingTop: "0",
-    width: "35%",
+    width: "340px",
   },
   input: {
     margin: "15px 0",
@@ -98,7 +98,6 @@ const Register = () => {
             type="password"
           />
           <Button
-            type="submit"
             className={classes.button}
             variant="contained"
             color="primary"
