@@ -71,7 +71,7 @@ const Login = () => {
                     <img src={logo} alt="logo" className={classes.logo} />
                     <TextField required name="email" className={classes.input} label="Your email" type="email" />
                     <TextField required name="password" className={classes.input} label="Your password" type="password" />
-                    <Button type="submit" className={classes.button} variant="contained" color="primary">Login</Button>
+                    <Button className={classes.button} variant="contained" color="primary">Login</Button>
                     <Typography className={classes.textColor}>Or sign in with...</Typography>
                     <Link className={classes.google} to="/login-google">Google</Link>
                     <Typography className={classes.textColor}>Does not have an account? <Link className={classes.a} to="/register">Sign-up now</Link></Typography>

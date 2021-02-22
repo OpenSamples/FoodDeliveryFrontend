@@ -1,5 +1,6 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
+import { Link } from 'react-router-dom'
 import { Button } from '@material-ui/core'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
@@ -91,7 +92,9 @@ const ShoppingCart = () => {
                 <div className={classes.container}>
                     <h2>{title}</h2>
                     {itemsCards()}
-                    <Button disabled={state.itemsInCart ? false : true} variant="outlined" color="primary" className={classes.placeOrderBtn}>Place order</Button>
+                    <Link to="/place-order" className={classes.placeOrderBtn}>
+                        <Button disabled={state.itemsInCart ? false : true} variant="outlined" color="primary">Place order</Button>
+                    </Link>
                 </div>
             </div>
             <Footer />

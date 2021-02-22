@@ -96,7 +96,7 @@ const Contact = () => {
                             <TextField required name="name" className={classes.input} label="Your name..." type="text" />
                             <TextField required name="email" className={classes.input} label="Your email..." type="email" />
                             <textarea name="message" cols="20" rows="10" required className={classes.textarea} placeholder="Your message..."></textarea>
-                            <Button type="submit" className={classes.button} variant="contained" color="primary">Send</Button>
+                            <Button className={classes.button} variant="contained" color="primary">Send</Button>
                         </form>
                     </div>
                 </div>
