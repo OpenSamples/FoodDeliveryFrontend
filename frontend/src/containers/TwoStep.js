@@ -15,12 +15,13 @@ const useStyles = makeStyles(() => ({
     container: {
         display: 'flex',
         flexDirection: 'column',
-        height: '100%',
+        height: '75%'
     },
     contact_us_div: {
         border: "1px solid #ccc",
         width: "30%",
-        margin: "auto",
+        margin: "160px auto",
+        height: '200px',
         borderRadius: "10px",
         boxShadow: "6px 7px 4px 1px rgba(0,0,0,0.75);",
         padding:"10px"
@@ -35,14 +36,14 @@ const useStyles = makeStyles(() => ({
     },
     input: {
         margin: "30px",
-        padding: "20px",
         width:"50%",
         margin:"auto"
     },
     title:{
         fontSize:"25px",
         marginBottom:"20px",
-        textAlign:"center"
+        textAlign:"center",
+        height: '15%'
     },
     buttons:{
         display:"grid",
@@ -62,8 +63,8 @@ const TwoStep = () => {
                     <form className={classes.container}>
                         <TextField required name="code" className={classes.input} label="Enter your verification code..." type="text" />
                        <div className={classes.buttons}>
-                        <Button className={classes.button} variant="contained" color="secondary">Verify</Button>
-                        <Button className={classes.button} variant="contained" color="default">Cancel</Button>
+                            <Button className={classes.button} variant="contained" color="secondary">Verify</Button>
+                            <Button className={classes.button} variant="contained" color="default">Cancel</Button>
                         </div> 
                     </form>
                 </div>
