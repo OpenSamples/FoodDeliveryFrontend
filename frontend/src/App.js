@@ -15,7 +15,7 @@ import AdminEditProducts from "./containers/AdminEditProducts";
 import AdminEditCategories from "./containers/AdminEditCategories";
 import AdminStatistics from "./containers/AdminStatistics";
 import PlaceOrder from './containers/PlaceOrder'
-
+import TwoStep from './containers/TwoStep'
 
 function App() {
   return (
@@ -34,6 +34,7 @@ function App() {
       <Route path="/admin-edit-categories" component={AdminEditCategories} />
       <Route path="/admin-stats" component={AdminStatistics} />
       <Route path="/place-order" component={PlaceOrder} />
+      <Route path="/two-step-verification" component={TwoStep} />
     </>
   );
 }
