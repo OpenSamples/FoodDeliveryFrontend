@@ -16,15 +16,15 @@ const useStyles = makeStyles(() => ({
     container: {
         display: 'flex',
         flexDirection: 'column',
-        height: '100%',
+        height: '60%',
         justifyContent: "center",
-        alignItems: "center",
-        padding:"10px"
+        alignItems: "center"
     },
     contact_us_div: {
         border: "1px solid #ccc",
-        width: "30%",
-        margin: "auto",
+        width: "550px",
+        margin: "100px auto",
+        height: '350px',
         borderRadius: "10px",
         boxShadow: "6px 7px 4px 1px rgba(0,0,0,0.75);",
         padding: "10px"
@@ -40,9 +40,7 @@ const useStyles = makeStyles(() => ({
     },
     input: {
         margin: "30px",
-        padding: "20px",
-        width: "50%",
-        margin: "auto"
+        width: "50%"
     },
     title: {
         fontSize: "35px",
@@ -58,6 +56,9 @@ const useStyles = makeStyles(() => ({
     lock: {
         width: "30px",
         height: "30px",
+    },
+    titleContainer: {
+        height: '40%'
     }
 }));
 
@@ -79,12 +80,14 @@ const TwoStep = () => {
             <Header />
             <div className={classes.root}>
                 <div className={classes.contact_us_div}>
+                    <div className={classes.titleContainer}>
                         <Typography className={classes.title}>Reset Your Password</Typography>
                         <Typography className={classes.title2}>Forgot password or want to change it ?</Typography>
-                        <Typography className={classes.title2}>Reset it now, provide us your email address.</Typography>
+                        <Typography className={classes.title2}>Reset it now, You just need to provide us your email address.</Typography>
                         <ColoredLine color="gray" />
+                    </div>
                     <form className={classes.container}>
-                    <LockIcon className={classes.lock}></LockIcon>
+                        <LockIcon className={classes.lock}></LockIcon>
                         <TextField required name="code" className={classes.input} label="Enter your email" type="email" />
                         <div className={classes.buttons}>
                             <Button className={classes.button} variant="contained" color="secondary">Send Reset Link</Button>
