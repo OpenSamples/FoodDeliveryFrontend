@@ -44,6 +44,14 @@ const useStyles = makeStyles(() => ({
     buttonCont: {
         margin: '0 5px',
         border: '1px solid #fff !important'
+    },
+    editProfile: {
+        textDecoration: 'none',
+        color: '#000',
+        '&:hover': {
+            textDecoration: 'none',
+            color: '#000'
+        }
     }
 }))
 
@@ -130,8 +138,7 @@ const Header = (props) => {
                     open={open}
                     onClose={handleClose}
                 >
-                    <MenuItem onClick={handleClose}>Profile</MenuItem>
-                    <MenuItem onClick={handleClose}>My account</MenuItem>
+                    <Link to="/edit-profile" className={classes.editProfile}><MenuItem onClick={handleClose}>My account</MenuItem></Link>
                     <MenuItem onClick={logout}>Logout</MenuItem>
                 </Menu>
             </>

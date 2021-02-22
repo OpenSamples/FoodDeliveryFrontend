@@ -14,7 +14,7 @@ import AdminEditUsers from "./containers/AdminEditUsers";
 import AdminEditProducts from "./containers/AdminEditProducts";
 import AdminEditCategories from "./containers/AdminEditCategories";
 import AdminStatistics from "./containers/AdminStatistics";
-import PlaceOrder from './containers/PlaceOrder'
+import PlaceOrder from './containers/PlaceOrder';
 
 
 function App() {
