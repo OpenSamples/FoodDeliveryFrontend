@@ -1,5 +1,4 @@
-import React from "react";
-
+import React, { useEffect } from "react";
 import { Route } from "react-router-dom";
 import Home from "./containers/Home";
 import Login from "./containers/Login";
@@ -17,6 +16,7 @@ import ForgotPassword from './containers/ForgotPassword'
 
 
 function App() {
+
   return (
     <>
       <Route path="/" exact component={Home} />
