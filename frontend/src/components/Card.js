@@ -38,7 +38,7 @@ const CardComponent = (props) => {
                 // Product is successfully added to cart
             }
         } catch(e) {
-
+            console.log(e)
         }
     }
 

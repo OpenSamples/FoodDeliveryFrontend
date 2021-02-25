@@ -214,6 +214,7 @@ const Menu = () => {
                 chunkProducts: getChunk(data, 10),
                 msg: msgForState
             })
+
         } catch(e) {
             setState({
                 ...state,

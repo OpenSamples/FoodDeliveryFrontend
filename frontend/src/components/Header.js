@@ -86,6 +86,7 @@ const Header = (props) => {
     const dispatch = useDispatch()
 
     const logged = useSelector(state => !!state.user._id)
+    const isAdmin = useSelector(state => state.user.role)
 
     const open = Boolean(state.anchorEl);
 
@@ -148,6 +149,7 @@ const Header = (props) => {
                     open={open}
                     onClose={handleClose}
                 >
+                    {isAdmin ? <Link to="/admin-dashboard" className={classes.editProfile}><MenuItem onClick={handleClose}>Admin dashboard</MenuItem></Link> : ''}
                     <Link to="/edit-profile" className={classes.editProfile}><MenuItem onClick={handleClose}>My account</MenuItem></Link>
                     <MenuItem onClick={logout}>Logout</MenuItem>
                 </Menu>

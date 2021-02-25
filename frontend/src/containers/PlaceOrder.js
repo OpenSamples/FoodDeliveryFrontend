@@ -77,7 +77,7 @@ const useStyles = makeStyles(() => ({
 //     }
 // ]
 
-const PlaceOrder = () => {
+const PlaceOrder = (props) => {
     const classes = useStyles()
 
     const [state, setState] = React.useState({
@@ -158,12 +158,15 @@ const PlaceOrder = () => {
                     fullName: state.firstName + ' ' + state.lastName
                 }
             })
-            console.log(orderData)
+
             if(orderData.data._id) {
                 setState({
                     ...state,
                     items: []
                 })
+
+                // Redirect
+                props.history.push('/')
             }
         } catch(e) {
             console.log(e)
