@@ -85,7 +85,7 @@ const Register = () => {
     try {
       let data = await axios({
         method: 'post',
-        url: 'http://localhost:5000/api/users/',
+        url: '/api/users/',
         data: {
           email: user.email,
           password: user.password,

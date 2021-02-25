@@ -74,8 +74,7 @@ const Login = () => {
         try {
             let data = await axios({
                 method: 'post',
-                url: 'http://localhost:5000/api/users/login',
-                headers: {}, 
+                url: '/api/users/login',
                 data: {
                   email: user.email, // This is the body part
                   password: user.password

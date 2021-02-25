@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo } from 'react'
 import axios from 'axios'
+import { host } from '../config/config'
 import { useSelector, useDispatch } from 'react-redux'
 import { makeStyles } from '@material-ui/core/styles'
 import Pagination from '@material-ui/lab/Pagination'
@@ -192,13 +193,15 @@ const Menu = () => {
         try {
             let { data } = await axios({
                 method: 'get',
-                url: 'http://localhost:5000/api/products'
+                url: '/api/products'
             })
     
             dispatch({
                 type: productAction,
                 products: data
             })
+
+            setProducts(data)
 
             let msgForState = ''
             
@@ -263,7 +266,7 @@ const Menu = () => {
                 <div className={classes.productContainer}>
                     {state.chunkProducts[state.productsPage].map((product, i) => {
                         return (
-                            <Card key={i} image={'http://localhost:5000/' + product.imageUrl} alt={product.name} name={product.name} description={product.detail} />
+                            <Card productId={product._id} key={i} image={host + product.imageUrl} alt={product.name} name={product.name} description={product.detail} />
                         )
                     })}
                     {state.message || state.msg}

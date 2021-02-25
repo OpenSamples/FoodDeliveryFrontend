@@ -1,5 +1,7 @@
 import React, { useEffect } from "react";
-import { Route } from "react-router-dom";
+import axios from 'axios'
+import { useSelector } from 'react-redux'
+import { Route, } from "react-router-dom";
 import Home from "./containers/Home";
 import Login from "./containers/Login";
 import Register from "./containers/Register";
@@ -13,25 +15,40 @@ import PlaceOrder from './containers/PlaceOrder'
 import TwoStep from './containers/TwoStep'
 import AdminDashboard from './containers/AdminDashboard'
 import ForgotPassword from './containers/ForgotPassword'
-
+import ProductCategories from './containers/Categories'
 
 function App() {
+  axios.defaults.baseURL = 'http://localhost:5000/';
+  axios.defaults.headers.common['Authorization'] = `Bearer ${useSelector(state => state.user.token)}`
+
+  const logged = useSelector(state => !!state.user._id) ? 
+        (
+          <>
+            <Route path="/edit-profile" component={EditProfile} />
+            <Route path="/shopping-cart" component={ShoppingCart} />
+            <Route path="/place-order" component={PlaceOrder} />
+          </>
+        ) : <>
+              <Route path="/login" component={Login} />
+              <Route path="/register" component={Register} />
+            </>;
+  const isAdmin = useSelector(state => state.user.role) ?        
+    <Route path={["/admin-dashboard/:page", "/admin-dashboard"]} component={AdminDashboard} />
+    : '';
+ 
 
   return (
     <>
       <Route path="/" exact component={Home} />
-      <Route path="/login" component={Login} />
-      <Route path="/register" component={Register} />
-      <Route path="/edit-profile" component={EditProfile} />
       <Route path="/menu" component={Menu} />
       <Route path="/about" component={About} />
       <Route path="/contact" component={Contact} />
       <Route path="/product/:id" component={SingleProduct} />
-      <Route path="/shopping-cart" component={ShoppingCart} />
-      <Route path="/place-order" component={PlaceOrder} />
       <Route path="/two-step-verification" component={TwoStep} />
-      <Route path={["/admin-dashboard/:page", "/admin-dashboard"]} component={AdminDashboard} />
       <Route path="/forgot-password" component={ForgotPassword} />
+      <Route path="/category/:id" component={ProductCategories} />
+      {logged}
+      {isAdmin}
     </>
   );
 }

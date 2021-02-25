@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import axios from 'axios'
+import { host } from '../config/config'
 import { useSelector, useDispatch } from 'react-redux'
 import { popularProductsAction, categoriesAction } from '../store/actions'
 import Carousel from 'react-material-ui-carousel'
@@ -135,7 +137,7 @@ const Home = () => {
         try {
             let { data } = await axios({
                 method: 'get',
-                url: 'http://localhost:5000/api/products/show/popular-products'
+                url: '/api/products/show/popular-products'
             })
 
 
@@ -146,7 +148,7 @@ const Home = () => {
 
             let categoriesAll = await axios({
                 method: 'get',
-                url: 'http://localhost:5000/api/categories/'
+                url: '/api/categories/'
             })
 
             let categories = categoriesAll.data
@@ -180,13 +182,15 @@ const Home = () => {
             <div className={classes.body}>
                 <Carousel className={classes.slider} animation="slide" interval={6000} timeout={1000}>
                     {state.items.map( (item, i) => (
-                        <ItemCarousel key={i} name={item.name} src={'http://localhost:5000/' + item.imageUrl} />
+                        <Link to={"/category/" + item._id}>
+                            <ItemCarousel key={i} name={item.name} src={host + item.imageUrl} />
+                        </Link>
                     ) )}
                 </Carousel>
                 <Typography className={classes.popular}>Popular products:</Typography>
                 <div className={classes.popularContainer}>
                     {state.popularProducts.map((item) => (
-                        <Card image={'http://localhost:5000/' + item.imageUrl} alt={item.name} name={item.name} description={item.detail} />
+                        <Card productId={item._id} image={host + item.imageUrl} alt={item.name} name={item.name} description={item.detail} />
                     ))}
                 </div>
             </div>
