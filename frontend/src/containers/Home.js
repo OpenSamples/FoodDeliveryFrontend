@@ -1,4 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
+import axios from 'axios'
+import { host } from '../config/config'
+import { useSelector, useDispatch } from 'react-redux'
+import { popularProductsAction, categoriesAction } from '../store/actions'
 import Carousel from 'react-material-ui-carousel'
 import { makeStyles } from '@material-ui/core/styles'
 import Header from '../components/Header'
@@ -37,97 +42,138 @@ const useStyles = makeStyles(() => ({
     }
 }))
 
-let items = [
-    {
-        name: "Name of category",
-        src: photo1
-    },
-    {
-        name: "Name of category",
-        src: photo2
-    },
-    {
-        name: "Name of category",
-        src: photo3
-    },
-    {
-        name: "Name of category",
-        src: photo4
-    },
-    {
-        name: "Name of category",
-        src: photo5
-    }
-]
+// let items = [
+//     {
+//         name: "Name of category",
+//         src: photo1
+//     },
+//     {
+//         name: "Name of category",
+//         src: photo2
+//     },
+//     {
+//         name: "Name of category",
+//         src: photo3
+//     },
+//     {
+//         name: "Name of category",
+//         src: photo4
+//     },
+//     {
+//         name: "Name of category",
+//         src: photo5
+//     }
+// ]
 
-let popularProducts = [
-    {
-        image: photo1,
-        alt: 'Photo 1',
-        name: 'Product 1',
-        description: 'Description for product 1'
-    },
-    {
-        image: photo2,
-        alt: 'Photo 2',
-        name: 'Product 2',
-        description: 'Description for product 2'
-    },
-    {
-        image: photo3,
-        alt: 'Photo 3',
-        name: 'Product 3',
-        description: 'Description for product 3'
-    },
-    {
-        image: photo4,
-        alt: 'Photo 4',
-        name: 'Product 4',
-        description: 'Description for product 4'
-    },
-    {
-        image: photo5,
-        alt: 'Photo 5',
-        name: 'Product 5',
-        description: 'Description for product 5'
-    },
-    {
-        image: photo1,
-        alt: 'Photo 1',
-        name: 'Product 1',
-        description: 'Description for product 1'
-    },
-    {
-        image: photo2,
-        alt: 'Photo 2',
-        name: 'Product 2',
-        description: 'Description for product 2'
-    },
-    {
-        image: photo3,
-        alt: 'Photo 3',
-        name: 'Product 3',
-        description: 'Description for product 3'
-    },
-    {
-        image: photo4,
-        alt: 'Photo 4',
-        name: 'Product 4',
-        description: 'Description for product 4'
-    },
-    {
-        image: photo5,
-        alt: 'Photo 5',
-        name: 'Product 5',
-        description: 'Description for product 5'
-    }
-]
+// let popularProducts = [
+//     {
+//         image: photo1,
+//         alt: 'Photo 1',
+//         name: 'Product 1',
+//         description: 'Description for product 1'
+//     },
+//     {
+//         image: photo2,
+//         alt: 'Photo 2',
+//         name: 'Product 2',
+//         description: 'Description for product 2'
+//     },
+//     {
+//         image: photo3,
+//         alt: 'Photo 3',
+//         name: 'Product 3',
+//         description: 'Description for product 3'
+//     },
+//     {
+//         image: photo4,
+//         alt: 'Photo 4',
+//         name: 'Product 4',
+//         description: 'Description for product 4'
+//     },
+//     {
+//         image: photo5,
+//         alt: 'Photo 5',
+//         name: 'Product 5',
+//         description: 'Description for product 5'
+//     },
+//     {
+//         image: photo1,
+//         alt: 'Photo 1',
+//         name: 'Product 1',
+//         description: 'Description for product 1'
+//     },
+//     {
+//         image: photo2,
+//         alt: 'Photo 2',
+//         name: 'Product 2',
+//         description: 'Description for product 2'
+//     },
+//     {
+//         image: photo3,
+//         alt: 'Photo 3',
+//         name: 'Product 3',
+//         description: 'Description for product 3'
+//     },
+//     {
+//         image: photo4,
+//         alt: 'Photo 4',
+//         name: 'Product 4',
+//         description: 'Description for product 4'
+//     },
+//     {
+//         image: photo5,
+//         alt: 'Photo 5',
+//         name: 'Product 5',
+//         description: 'Description for product 5'
+//     }
+// ]
 
 const Home = () => {
     const classes = useStyles()
 
+    const dispatch = useDispatch()
+
+    useEffect(async () => {
+        try {
+            let { data } = await axios({
+                method: 'get',
+                url: '/api/products/show/popular-products'
+            })
+
+
+            dispatch({
+                type: popularProductsAction,
+                popularProducts: data
+            })
+
+            let categoriesAll = await axios({
+                method: 'get',
+                url: '/api/categories/'
+            })
+
+            let categories = categoriesAll.data
+
+            dispatch({
+                type: categoriesAction,
+                categories
+            })
+
+            setState({
+                ...state,
+                popularProducts: data.slice(0, 10),
+                items: categories
+            })
+
+        } catch(e) {
+
+        }
+
+    }, [])
+
     const [state, setState] = useState({
-        logged: true
+        logged: true,
+        popularProducts: useSelector(state => state.popularProducts).slice(0, 10),
+        items: useSelector(state => state.categories)
     })
     
     return (
@@ -135,14 +181,16 @@ const Home = () => {
             <Header />
             <div className={classes.body}>
                 <Carousel className={classes.slider} animation="slide" interval={6000} timeout={1000}>
-                    {items.map( (item, i) => (
-                        <ItemCarousel key={i} name={item.name} src={item.src} />
+                    {state.items.map( (item, i) => (
+                        <Link to={"/category/" + item._id}>
+                            <ItemCarousel key={i} name={item.name} src={host + item.imageUrl} />
+                        </Link>
                     ) )}
                 </Carousel>
                 <Typography className={classes.popular}>Popular products:</Typography>
                 <div className={classes.popularContainer}>
-                    {popularProducts.map((item) => (
-                        <Card image={item.image} alt={item.alt} name={item.name} description={item.description} />
+                    {state.popularProducts.map((item) => (
+                        <Card productId={item._id} image={host + item.imageUrl} alt={item.name} name={item.name} description={item.detail} />
                     ))}
                 </div>
             </div>

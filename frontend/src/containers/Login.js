@@ -1,9 +1,12 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import axios from 'axios'
 import { makeStyles } from '@material-ui/core/styles'
 import { TextField, Button, Typography, IconButton } from '@material-ui/core';
 import { Link } from 'react-router-dom'
 import logo from '../assets/logo.png'
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import { login } from '../store/actions'
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -58,6 +61,53 @@ const useStyles = makeStyles(() => ({
 const Login = () => {
     const classes = useStyles()
 
+    const [user, setUser] = useState({
+        email: '',
+        password: ''
+    })
+
+    const dispatch = useDispatch()
+
+    const tryLogin = async (event) => {
+        event.preventDefault()
+
+        try {
+            let data = await axios({
+                method: 'post',
+                url: '/api/users/login',
+                data: {
+                  email: user.email, // This is the body part
+                  password: user.password
+                }
+            });
+        
+            console.log(data)
+            if(data.data.message === 'Successfully logged in!') {
+                // alert('Logged in!')
+                dispatch({
+                    type: 'login',
+                    user: data.data.user
+                })
+
+
+            } else {
+                alert('Wrong creds!')
+            }
+              
+        } catch(e) {
+            // console.log(e)
+            alert('error')
+        }
+        // console.log(user)
+    }
+
+    const updateUser = (event) => {
+        setUser({
+            ...user,
+            [event.target.name]: event.target.value
+        })
+    }
+
     return (
         <>
             <Link to="/" className={classes.homepage}>
@@ -67,11 +117,11 @@ const Login = () => {
                 Back to homepage
             </Link>
             <div className={classes.root}>
-                <form className={classes.container}>
+                <form className={classes.container} onSubmit={tryLogin}>
                     <img src={logo} alt="logo" className={classes.logo} />
-                    <TextField required name="email" className={classes.input} label="Your email" type="email" />
-                    <TextField required name="password" className={classes.input} label="Your password" type="password" />
-                    <Button className={classes.button} variant="contained" color="primary">Login</Button>
+                    <TextField onChange={updateUser} required name="email" className={classes.input} label="Your email" type="email" />
+                    <TextField onChange={updateUser} required name="password" className={classes.input} label="Your password" type="password" />
+                    <Button type="submit" className={classes.button} variant="contained" color="primary">Login</Button>
                     <Typography className={classes.textColor}>Or sign in with...</Typography>
                     <Link className={classes.google} to="/login-google">Google</Link>
                     <Typography className={classes.textColor}>Does not have an account? <Link className={classes.a} to="/register">Sign-up now</Link></Typography>

@@ -1,0 +1,140 @@
+import React, { useEffect, useMemo } from 'react'
+import axios from 'axios'
+import { host } from '../config/config'
+import { useSelector, useDispatch } from 'react-redux'
+import { makeStyles } from '@material-ui/core/styles'
+import Pagination from '@material-ui/lab/Pagination'
+import Header from '../components/Header'
+import Footer from '../components/Footer'
+import Card from '../components/Card'
+import Filters from '../components/Filters'
+import { products as productAction, productCategoriesAction } from '../store/actions/'
+import photo1 from '../assets/categories/1.jpg'
+import photo2 from '../assets/categories/2.jpeg'
+import photo3 from '../assets/categories/3.jpg'
+import photo4 from '../assets/categories/4.jpg'
+import photo5 from '../assets/categories/5.jpg'
+
+const useStyles = makeStyles((theme) => ({
+    container: {
+        minHeight: '100vh',
+        width: '70%',
+        maxWidth: '1300px',
+        margin: '80px auto',
+        display: 'flex',
+        flexDirection: 'column'
+    },
+    productContainer: {
+        width: '100%',
+        display: 'flex',
+        gap: '2rem',
+        flexWrap: 'wrap',
+        justifyContent: 'center',
+        borderBottom: '1px solid #ccc',
+        paddingBottom: '2rem',
+        borderTop: '1px solid #ccc',
+        paddingTop: '2.4rem'
+    },
+    pagination: {
+        alignSelf: 'center',
+        marginTop: '3rem'
+    } 
+}))
+
+const Categories = (props) => {
+    const classes = useStyles()
+
+    const dispatch = useDispatch()
+
+    const [products, setProducts] = React.useState(useSelector(state => state.productsPerCategory))
+
+    const getChunk = (array, perChunk) => {
+        if(!array.length) {
+            return [[]]
+        }
+
+        return array.reduce((resultArray, item, index) => {
+            const chunkIndex = Math.floor(index / perChunk)
+
+            if(!resultArray[chunkIndex]) {
+              resultArray[chunkIndex] = [] // start a new chunk
+            }
+          
+            resultArray[chunkIndex].push(item)
+          
+            return resultArray
+        }, [])
+    }
+
+    const [state, setState] = React.useState({
+        chunkProducts: getChunk(products, 10),
+        productsPage: 0,
+        message: '',
+        msg: 'Loading...',
+        id: props.match.params.id
+    })
+
+
+    useEffect(async () => {
+        try {
+            let { data } = await axios({
+                method: 'get',
+                url: '/api/products/products-by-category/' + state.id
+            })
+    
+            dispatch({
+                type: productCategoriesAction,
+                products: data
+            })
+
+            setProducts(data)
+
+            let msgForState = ''
+            
+            if(!data.length) {
+                msgForState = 'No product found!'
+            }
+
+            setState({
+                ...state,
+                chunkProducts: getChunk(data, 10),
+                msg: msgForState
+            })
+        } catch(e) {
+            setState({
+                ...state,
+                msg: 'Something went wrong...'
+            })
+            alert('error')
+        }
+    }, [])       
+
+    const changePage = (event, value) => {
+        setState({
+            ...state,
+            productsPage: value - 1,
+        })
+    }
+
+    return (
+        <>
+            <Header />
+            <div className={classes.container}>
+                <Filters disableSelect state={state} setState={setState} getChunk={getChunk} products={products} />
+                <div className={classes.productContainer}>
+                    {state.chunkProducts[state.productsPage].map((product, i) => {
+                        return (
+                            <Card productId={product._id} key={i} image={host + product.imageUrl} alt={product.name} name={product.name} description={product.detail} />
+                        )
+                    })}
+                    {state.message || state.msg}
+                </div>
+                <Pagination className={classes.pagination} page={state.productsPage + 1} count={state.chunkProducts.length} color="primary" onChange={changePage} showFirstButton showLastButton />
+            </div>
+            <Footer />
+        </>
+    )
+}
+
+
+export default Categories

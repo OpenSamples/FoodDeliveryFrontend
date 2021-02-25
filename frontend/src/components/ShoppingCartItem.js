@@ -1,7 +1,9 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import { IconButton } from '@material-ui/core'
+import { host } from '../config/config'
 import { Delete, Remove, Add } from '@material-ui/icons'
+import axios from 'axios'
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -44,12 +46,56 @@ const useStyles = makeStyles(() => ({
 const ShoppingCartItem = props => {
     const classes = useStyles()
 
-    const increaseQty = (val) => () => {
-        if(!(props.state.qty === 1 && val < 0)) {
-            props.setState({
-                ...props.state,
-                qty: props.state.qty + val
+    const increaseQty = (val) => async () => {
+        try {
+
+            let dataIsUpdated = await axios({
+                method: 'post',
+                url: '/api/shopping-cart-items/qty/increase',
+                data: {
+                    productId: props.productId,
+                    value: val
+                }
             })
+    
+            if(dataIsUpdated.data._id) {
+                if(!(props.state.items[props.idx].qty === 1 && val < 0)) {
+                    props.setState({
+                        ...props.state,
+                        items: props.state.items.map((item, idx) => {
+                            if(idx === props.idx) {
+                                item.qty += val 
+                            }
+                            return item
+                        })
+                    })
+                }
+            }
+
+        } catch(e) {
+
+        }
+
+    }
+
+    const deleteFromCart = async () => {
+        try {
+            let removedProduct = await axios({
+                method: 'post',
+                url: '/api/shopping-cart-items/cart/remove-product',
+                data: {
+                    productId: props.productId
+                }
+            })
+
+            if(removedProduct.data.msg === 'Product removed from Shopping Cart') {
+                props.setState({
+                    ...props.state,
+                    items: props.state.items.filter(item => props.productId !== item.productId)
+                })
+            }
+        } catch(e) {
+
         }
     }
 
@@ -59,7 +105,7 @@ const ShoppingCartItem = props => {
                 <div className={classes.details}>
                     <span className={classes.title}>{props.name}</span>
                     <p>{props.details}</p>
-                    <span className={classes.price}>${props.price} * {props.state.qty}</span>
+                    <span className={classes.price}>${props.price} * {props.qty}</span>
                 </div>
                 <div className={classes.imageQty}>
                     <span>
@@ -71,10 +117,10 @@ const ShoppingCartItem = props => {
                             <Add />
                         </IconButton>
                     </span>
-                    <img src={props.thumbnail} alt={props.name} className={classes.thumbnail} />
+                    <img src={host + props.thumbnail} alt={props.name} className={classes.thumbnail} />
                 </div>
             </div>
-            <IconButton color="secondary">
+            <IconButton onClick={deleteFromCart} color="secondary">
                 <Delete />
             </IconButton>
         </div>

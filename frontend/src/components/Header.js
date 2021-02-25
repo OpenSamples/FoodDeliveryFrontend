@@ -7,6 +7,8 @@ import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import PersonIcon from '@material-ui/icons/Person';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import logo from '../assets/logo.png';
+import { useDispatch, useSelector } from 'react-redux'
+import { logout as logoutAction } from '../store/actions'
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -81,6 +83,10 @@ const Header = (props) => {
         anchorEl: null
     })
 
+    const dispatch = useDispatch()
+
+    const logged = useSelector(state => !!state.user._id)
+
     const open = Boolean(state.anchorEl);
 
     const handleMenu = (event) => {
@@ -98,10 +104,14 @@ const Header = (props) => {
     };
 
     const logout = () => {
-        setState({
-            ...state,
-            logged: false,
-            anchorEl: null
+        // setState({
+        //     ...state,
+        //     logged: false,
+        //     anchorEl: null
+        // })
+
+        dispatch({
+            type: logoutAction
         })
     }
 
@@ -175,7 +185,7 @@ const Header = (props) => {
                             )
                         })}
                     </div>
-                    {state.logged ? loggedIn() : loggedOut()}
+                    {logged ? loggedIn() : loggedOut()}
                 </div>
             </Toolbar>
         </AppBar>

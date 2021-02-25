@@ -69,14 +69,15 @@ const Filters = (props) => {
         // Perform filter
 
         let filteredProducts = props.products.filter((product) => {
-            if((state.category === '' || product.category === state.category) && 
-                (product.name.toLowerCase().includes(state.searchText.toLowerCase()) || 
-                    product.description.toLowerCase().includes(state.searchText.toLowerCase()))) {
-
-                return product
-            }
+                if((state.category === '' || product.category === state.category) && 
+                    (state.searchText === '' || product.name.toLowerCase().includes(state.searchText.toLowerCase()) || 
+                        product.detail.toLowerCase().includes(state.searchText.toLowerCase()))) {
+    
+                    return product
+                }
         })
 
+        console.log(filteredProducts)
 
         let chunkArrProduct = props.getChunk(filteredProducts, 10)
         let message = ''
@@ -111,25 +112,30 @@ const Filters = (props) => {
     return (
         <>
             <div className={classes.filters}>
-                <FormControl className={classes.formControl}>
-                    <InputLabel htmlFor="categories">Category</InputLabel>
-                    <Select
-                        native
-                        value={state.category}
-                        onChange={handleChangeCategory}
-                        inputProps={{
-                            name: 'category',
-                            id: 'categories',
-                        }}
-                    >
-                        <option aria-label="None" value="" />
-                        <option value='Category 1'>Category 1</option>
-                        <option value='Category 2'>Category 2</option>
-                        <option value='Category 3'>Category 3</option>
-                        <option value='Category 4'>Category 4</option>
-                        <option value='Category 5'>Category 5</option>
-                    </Select>
-                </FormControl>
+                {
+                    props.disableSelect ? 
+                     '' :
+                     <FormControl className={classes.formControl}>
+                        <InputLabel htmlFor="categories">Category</InputLabel>
+                        <Select
+                            native
+                            value={state.category}
+                            onChange={handleChangeCategory}
+                            inputProps={{
+                                name: 'category',
+                                id: 'categories',
+                            }}
+                        >
+                            <option aria-label="None" value="" />
+                            <option value='Category 1'>Category 1</option>
+                            <option value='Category 2'>Category 2</option>
+                            <option value='Category 3'>Category 3</option>
+                            <option value='Category 4'>Category 4</option>
+                            <option value='Category 5'>Category 5</option>
+                        </Select>
+                    </FormControl>
+                }
+                
                 <div className={classes.search}>
                     <div className={classes.searchIcon}>
                         <SearchIcon />

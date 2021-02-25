@@ -1,6 +1,9 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Link } from "react-router-dom";
+import axios from 'axios'
+import { login } from '../store/actions'
+import { useDispatch } from 'react-redux'
 import { TextField, Button, Typography, IconButton } from "@material-ui/core";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import logo from "../assets/logo.png";
@@ -58,6 +61,50 @@ const useStyles = makeStyles(() => ({
 
 const Register = () => {
   const classes = useStyles();
+
+  const dispatch = useDispatch()
+
+  const [user, setUser] = React.useState({
+    email: '',
+    fullName: '',
+    password: ''
+
+  })
+
+  const updateUser = (event) => {
+    setUser({
+      ...user,
+      [event.target.name]: event.target.value
+    })
+  }
+
+
+  const registerUser = async (event) => {
+    event.preventDefault()
+
+    try {
+      let data = await axios({
+        method: 'post',
+        url: '/api/users/',
+        data: {
+          email: user.email,
+          password: user.password,
+          firstName: user.fullName.split(' ')[0],
+          lastName: user.fullName.split(' ')[1]
+        }
+      })
+
+      dispatch({
+        type: login,
+        user: data.data
+      })
+      alert('registered!')
+    } catch(e) {
+      alert('error')
+    }
+  }
+
+
   return (
     <>
       <Link to="/" className={classes.homepage}>
@@ -67,9 +114,10 @@ const Register = () => {
         Back to homepage
       </Link>
       <div className={classes.root}>
-        <form className={classes.container}>
+        <form className={classes.container} onSubmit={registerUser}>
           <img src={logo} alt="logo" className={classes.logo} />
           <TextField
+            onChange={updateUser}
             required
             name="email"
             className={classes.input}
@@ -77,13 +125,15 @@ const Register = () => {
             type="email"
           />
           <TextField
+            onChange={updateUser}
             required
-            name="full-name"
+            name="fullName"
             className={classes.input}
             label="Full Name"
             type="text"
           />
           <TextField
+            onChange={updateUser}
             required
             name="password"
             className={classes.input}
@@ -98,6 +148,7 @@ const Register = () => {
             type="password"
           />
           <Button
+            type="submit"
             className={classes.button}
             variant="contained"
             color="primary"

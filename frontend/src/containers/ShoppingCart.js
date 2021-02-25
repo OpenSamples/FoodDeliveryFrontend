@@ -1,11 +1,13 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
+import axios from 'axios'
 import { Link } from 'react-router-dom'
 import { Button } from '@material-ui/core'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import ShoppingCartItem from '../components/ShoppingCartItem'
 import photo1 from '../assets/categories/1.jpg'
+import { useSelector } from 'react-redux'
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -34,37 +36,62 @@ const useStyles = makeStyles(() => ({
     }
 }))
 
-const items = [
-    {
-        name: 'Product 1',
-        details: 'Details for product 1',
-        qty: 2,
-        price: 14,
-        thumbnail: photo1
-    },
-    {
-        name: 'Product 2',
-        details: 'Details for product 2',
-        qty: 5,
-        price: 10,
-        thumbnail: photo1
-    },
-    {
-        name: 'Product 3',
-        details: 'Details for product 3',
-        qty: 1,
-        price: 4,
-        thumbnail: photo1
-    }
-]
+// const items = [
+//     {
+//         name: 'Product 1',
+//         details: 'Details for product 1',
+//         qty: 2,
+//         price: 14,
+//         thumbnail: photo1
+//     },
+//     {
+//         name: 'Product 2',
+//         details: 'Details for product 2',
+//         qty: 5,
+//         price: 10,
+//         thumbnail: photo1
+//     },
+//     {
+//         name: 'Product 3',
+//         details: 'Details for product 3',
+//         qty: 1,
+//         price: 4,
+//         thumbnail: photo1
+//     }
+// ]
 
 const ShoppingCart = () => {
     const classes = useStyles()
 
     const [state, setState] = React.useState({
-        qty: 3,
-        itemsInCart: items.length
+        items: useSelector(state => state.itemsInCart)
     })
+
+    React.useEffect(async () => {
+        try {
+            let data = await axios({
+                method: 'get',
+                url: '/api/shopping-cart-items'
+            })
+
+            if(!data.data || data.data.error) {
+                setState({
+                    ...state,
+                    items: []
+                })
+            } else {
+                setState({
+                    ...state,
+                    items: [...data.data]
+                })
+            }
+        } catch(e) {
+            console.log('aa')
+        }
+
+    }, [])
+
+
 
     let itemsCards = () => (
         <></>
@@ -72,11 +99,12 @@ const ShoppingCart = () => {
 
     let title = "Your Shopping Cart Items:"
 
-    if(state.itemsInCart) {
+    if(state.items.length) {
         itemsCards = () => (
-            items.map((item, i) => (
-                <ShoppingCartItem state={state} setState={setState} key={i} name={item.name} details={item.details} qty={item.qty} price={item.price} thumbnail={item.thumbnail} />
-            ))
+            state.items.map((info, i) => {
+                return (
+                <ShoppingCartItem state={state} productId={info.productId} idx={i} setState={setState} key={i} name={info.name} details={info.detail} qty={state.items[i].qty} price={info.price} thumbnail={info.imageUrl} />
+            )})
         )
     } else {
         itemsCards = () => (

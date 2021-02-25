@@ -1,8 +1,11 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
+import { Link } from 'react-router-dom'
 import { Card, CardActionArea, CardActions, CardContent, CardMedia} from '@material-ui/core'
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import axios from 'axios'
 
 const useStyles = makeStyles({
     root: {
@@ -11,11 +14,33 @@ const useStyles = makeStyles({
     },
     media: {
       height: 140,
+    },
+    actions: {
+        justifyContent: 'space-between'
     }
 });
 
 const CardComponent = (props) => {
     const classes = useStyles()
+
+
+    const addToCartFinish = async () => {
+        try {
+            let productCart = await axios({
+                method: 'post',
+                url: '/api/shopping-cart-items/' + props.productId,
+                data: {
+                    qty: 1
+                }
+            })
+    
+            if(productCart.data.msg.startsWith('Product added to cart that belongs to user:')) {
+                // Product is successfully added to cart
+            }
+        } catch(e) {
+
+        }
+    }
 
     return (
         <Card className={classes.root}>
@@ -34,12 +59,14 @@ const CardComponent = (props) => {
                     </Typography>
                 </CardContent>
             </CardActionArea>
-            <CardActions>
-                <Button size="small" color="primary">
-                    Share
-                </Button>
-                <Button size="small" color="primary">
-                    Learn More
+            <CardActions className={classes.actions}>
+                <Link to={'/product/' + props.productId}>
+                    <Button size="small" color="primary">
+                        View
+                    </Button>
+                </Link>
+                <Button onClick={addToCartFinish} startIcon={<ShoppingCartIcon />} size="small" color="primary">
+                    Add to cart
                 </Button>
             </CardActions>
         </Card>
