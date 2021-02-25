@@ -18,6 +18,8 @@ const useStyles = makeStyles((theme) => ({
     },
     drawerOpen: {
         width: drawerWidth,
+        backgroundColor: '#3f51b5',
+        color: '#fff',
         transition: theme.transitions.create('width', {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.enteringScreen,
@@ -29,6 +31,8 @@ const useStyles = makeStyles((theme) => ({
             duration: theme.transitions.duration.leavingScreen,
         }),
         overflowX: 'hidden',
+        backgroundColor: '#3f51b5',
+        color: '#fff',
         width: theme.spacing(7) + 1,
         [theme.breakpoints.up('sm')]: {
             width: theme.spacing(9) + 1,
@@ -50,6 +54,9 @@ const useStyles = makeStyles((theme) => ({
         '&:hover': {
             textDecoration: 'none'
         }
+    },
+    colorWhite: {
+        color: '#fff !important'
     }
 }));
 
@@ -75,7 +82,7 @@ const Sidebar = props => {
     }
 
     const closeButton = (
-        <IconButton onClick={handleDrawerClose}>
+        <IconButton color="inherit" onClick={handleDrawerClose}>
             {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
         </IconButton>
     )
@@ -112,7 +119,7 @@ const Sidebar = props => {
                 {[{name: 'Statistics', icon: <Equalizer />}, {name: 'Users', icon: <Person />}, {name: 'Categories', icon: <Category />}, {name: 'Products', icon: <Fastfood />}].map((item, index) => (
                     <Link to={'/admin-dashboard/' + item.name.toLowerCase()} onClick={() => changeBody(item.name.toLowerCase())} className={classes.navItems}>
                         <ListItem button key={item.name}>
-                                <ListItemIcon>{item.icon}</ListItemIcon>
+                                <ListItemIcon className={classes.colorWhite}>{item.icon}</ListItemIcon>
                                 <ListItemText primary={item.name} />
                         </ListItem>
                     </Link>

@@ -4,6 +4,8 @@ import Footer from '../components/Footer'
 import { makeStyles } from "@material-ui/core/styles";
 import contactUsEmail from '../assets/email.png'
 import { TextField, Button, Typography } from '@material-ui/core';
+import axios from 'axios'
+import { useDispatch } from 'react-redux'
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -52,8 +54,53 @@ const useStyles = makeStyles(() => ({
     }
 }));
 
-const TwoStep = () => {
+const TwoStep = (props) => {
     const classes = useStyles();
+
+    const dispatch = useDispatch()
+
+    const [state, setState] = React.useState({
+        token: props.match.params.token,
+        code: ''
+    })
+
+    const changeCode = (event) => {
+        setState({
+            ...state,
+            code: event.target.value
+        })
+    }
+
+    const verifyCode = async () => {
+        try {
+            let codeValid = await axios({
+                method: 'post',
+                url: `/api/users/verify_2fa/${state.token}?code=${+state.code}`
+            })
+
+            if(codeValid.data.message === 'Successfully!') {
+                // Logged in
+                dispatch({
+                    type: 'login',
+                    user: codeValid.data.user
+                })
+
+                // Redirect
+                props.history.push('/')
+            } else {
+                // Not logged in
+            }
+        } catch(e) {
+            console.log(e)
+        }
+
+        
+    }
+
+    const abortVerification = () => {
+        props.history.push('/')
+    }
+
     return (
         <>
             <Header />
@@ -61,10 +108,10 @@ const TwoStep = () => {
                 <div className={classes.contact_us_div}>
                     <Typography className={classes.title}>2-Step Verification</Typography>
                     <form className={classes.container}>
-                        <TextField required name="code" className={classes.input} label="Enter your verification code..." type="text" />
+                        <TextField value={state.code} onChange={changeCode} required name="code" className={classes.input} label="Enter your verification code..." type="text" />
                        <div className={classes.buttons}>
-                            <Button className={classes.button} variant="contained" color="secondary">Verify</Button>
-                            <Button className={classes.button} variant="contained" color="default">Cancel</Button>
+                            <Button onClick={verifyCode} className={classes.button} variant="contained" color="secondary">Verify</Button>
+                            <Button onClick={abortVerification} className={classes.button} variant="contained" color="default">Cancel</Button>
                         </div> 
                     </form>
                 </div>

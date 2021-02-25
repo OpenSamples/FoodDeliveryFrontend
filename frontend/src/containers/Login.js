@@ -58,7 +58,7 @@ const useStyles = makeStyles(() => ({
     }
 }))
 
-const Login = () => {
+const Login = (props) => {
     const classes = useStyles()
 
     const [user, setUser] = useState({
@@ -81,7 +81,7 @@ const Login = () => {
                 }
             });
         
-            console.log(data)
+
             if(data.data.message === 'Successfully logged in!') {
                 // alert('Logged in!')
                 dispatch({
@@ -89,7 +89,10 @@ const Login = () => {
                     user: data.data.user
                 })
 
-
+                // Redirect
+                props.history.push('/')
+            } else if(data.data.message.startsWith('User uses 2 factor authentication.')) {
+                props.history.push('/two-step-verification/' + data.data.token)
             } else {
                 alert('Wrong creds!')
             }

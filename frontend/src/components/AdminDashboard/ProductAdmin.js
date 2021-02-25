@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-
+import DeleteIcon from '@material-ui/icons/Delete';
+import { Link } from 'react-router-dom'
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -9,6 +10,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import { Button, Typography } from "@material-ui/core";
+import axios from 'axios'
 
 const useStyles = makeStyles(() => ({
   body: {
@@ -23,26 +25,75 @@ const useStyles = makeStyles(() => ({
   button: {
     margin: "5px",
   },
+  spaceBetween: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    marginBottom: '10px'
+  }
 }));
-function createData(name, detail, imageUrl, emailIsVerified) {
-  return { name, detail, imageUrl };
-}
 
-const rows = [
-  createData("Pizza", "lorem ipsum", "images/products/pizza.jpg"),
-  createData("Spaghetti", "lorem ipsum", "images/products/spaghetti.jpg"),
-  createData("Hamburger", "lorem ipsum", "images/products/hamburger.jpg"),
-];
-export default function AdminEditProducts() {
+
+export default function AdminEditProducts(props) {
   const classes = useStyles();
 
   const [state, setState] = useState({
     logged: true,
+    products: []
   });
+
+  React.useEffect(async () => {
+    try {
+      let allProducts = await axios({
+        method: 'get',
+        url: '/api/products'
+      })
+
+      if(allProducts.data.length) {
+        setState({
+          ...state,
+          products: allProducts.data
+        })
+      }
+    } catch(e) {
+
+    }
+  }, [])
+
+  const deleteProduct = async (id) => {
+    try {
+      let deletedProduct = await axios({
+        method: 'delete',
+        url: '/api/products/' + id
+      })
+
+
+      if(deletedProduct.data.deletedCount) {
+        setState({
+          ...state,
+          products: state.products.filter(product => product._id !== id)
+        })
+      }
+
+    } catch(e) {
+
+    }
+  }
+
+  const changePage = () => {
+    props.setState({
+      ...props.state, 
+      page: 'create-product'
+    })
+  }
 
   return (
       <div className={classes.body}>
-        <Typography className={classes.textColor}>Edit Products:</Typography>
+        <span className={classes.spaceBetween}>
+          <Typography className={classes.textColor}>All Products:</Typography>
+          <Link to="/admin-dashboard/create-product" onClick={changePage}>
+            <Button variant="outlined" color="primary">Create new product</Button>
+          </Link>
+        </span>
 
         <TableContainer component={Paper}>
           <Table className={classes.table} aria-label="simple table">
@@ -54,8 +105,8 @@ export default function AdminEditProducts() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows.map((row) => (
-                <TableRow key={row.name}>
+              {state.products.map((row, idx) => (
+                <TableRow key={idx}>
                   <TableCell component="th" scope="row">
                     {row.name}
                   </TableCell>
@@ -63,18 +114,11 @@ export default function AdminEditProducts() {
                   <TableCell align="right">{row.imageUrl}</TableCell>
                   <TableCell align="right">
                     <Button
-                      type="submit"
-                      className={classes.button}
-                      variant="contained"
-                      color="warning"
-                    >
-                      Edit
-                    </Button>
-                    <Button
-                      type="submit"
+                      onClick={() => deleteProduct(row._id)}
                       className={classes.button}
                       variant="contained"
                       color="secondary"
+                      startIcon={<DeleteIcon />}
                     >
                       Delete
                     </Button>

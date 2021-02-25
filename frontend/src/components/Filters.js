@@ -2,6 +2,7 @@ import React from 'react'
 import { fade, makeStyles } from '@material-ui/core/styles'
 import { Button, Select, FormControl, InputLabel, InputBase } from '@material-ui/core'
 import SearchIcon from '@material-ui/icons/Search'
+import axios from 'axios'
 
 const useStyles = makeStyles((theme) => ({
     filters: {
@@ -61,7 +62,8 @@ const Filters = (props) => {
     const [state, setState] = React.useState({
         category: '',
         searchText: '',
-        message: ''
+        message: '',
+        categories: []
     })
 
     const filterProducts = () => {
@@ -69,7 +71,7 @@ const Filters = (props) => {
         // Perform filter
 
         let filteredProducts = props.products.filter((product) => {
-                if((state.category === '' || product.category === state.category) && 
+                if((state.category === '' || product.categoryId === state.category) && 
                     (state.searchText === '' || product.name.toLowerCase().includes(state.searchText.toLowerCase()) || 
                         product.detail.toLowerCase().includes(state.searchText.toLowerCase()))) {
     
@@ -77,7 +79,6 @@ const Filters = (props) => {
                 }
         })
 
-        console.log(filteredProducts)
 
         let chunkArrProduct = props.getChunk(filteredProducts, 10)
         let message = ''
@@ -94,6 +95,24 @@ const Filters = (props) => {
             productsPage: 0
         })
     }
+
+    React.useEffect(async () => {
+        try {
+            let categoriesAll = await axios({
+                method: 'get',
+                url: '/api/categories'
+            })
+
+            if(categoriesAll.data.length > 0) {
+                setState({
+                    ...state,
+                    categories: categoriesAll.data
+                })
+            }
+        } catch(e) {
+
+        }
+    }, [])
 
     const handleChangeCategory = (event) => {
         setState({
@@ -127,11 +146,7 @@ const Filters = (props) => {
                             }}
                         >
                             <option aria-label="None" value="" />
-                            <option value='Category 1'>Category 1</option>
-                            <option value='Category 2'>Category 2</option>
-                            <option value='Category 3'>Category 3</option>
-                            <option value='Category 4'>Category 4</option>
-                            <option value='Category 5'>Category 5</option>
+                            {state.categories.map(category => <option value={category._id}>{category.name}</option>)}
                         </Select>
                     </FormControl>
                 }

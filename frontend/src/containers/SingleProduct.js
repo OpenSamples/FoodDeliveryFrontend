@@ -97,19 +97,24 @@ const SingleProduct = (props) => {
     })
 
     React.useEffect(async () => {
-        let response = await axios({
-            method: 'get',
-            url: '/api/products/' + state.id
-        })
-
-        if(response.data[0]._id) {
-            let productData = response.data[0]
-
-            setState({
-                ...state,
-                product: productData
+        try {
+            let response = await axios({
+                method: 'get',
+                url: '/api/products/' + state.id
             })
+    
+            if(response.data[0]._id) {
+                let productData = response.data[0]
+    
+                setState({
+                    ...state,
+                    product: productData
+                })
+            }
+        } catch(e) {
+
         }
+        
     }, [])
 
     let body = () => (

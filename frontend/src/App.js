@@ -44,7 +44,7 @@ function App() {
       <Route path="/about" component={About} />
       <Route path="/contact" component={Contact} />
       <Route path="/product/:id" component={SingleProduct} />
-      <Route path="/two-step-verification" component={TwoStep} />
+      <Route path="/two-step-verification/:token" component={TwoStep} />
       <Route path="/forgot-password" component={ForgotPassword} />
       <Route path="/category/:id" component={ProductCategories} />
       {logged}

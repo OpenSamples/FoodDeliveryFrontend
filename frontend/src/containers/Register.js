@@ -59,7 +59,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const Register = () => {
+const Register = (props) => {
   const classes = useStyles();
 
   const dispatch = useDispatch()
@@ -96,9 +96,13 @@ const Register = () => {
 
       dispatch({
         type: login,
-        user: data.data
+        user: data.data.user
       })
-      alert('registered!')
+
+      // Redirect
+      props.history.push('/')
+      
+      // alert('registered!')
     } catch(e) {
       alert('error')
     }
