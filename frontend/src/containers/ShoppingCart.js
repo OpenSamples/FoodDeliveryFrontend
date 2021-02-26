@@ -8,6 +8,7 @@ import Footer from '../components/Footer'
 import ShoppingCartItem from '../components/ShoppingCartItem'
 import photo1 from '../assets/categories/1.jpg'
 import { useSelector } from 'react-redux'
+import AlertMessage from '../components/AlertMessage'
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -64,7 +65,11 @@ const ShoppingCart = () => {
     const classes = useStyles()
 
     const [state, setState] = React.useState({
-        items: useSelector(state => state.itemsInCart)
+        items: useSelector(state => state.itemsInCart),
+        popup: false,
+        popupInfo: {
+
+        }
     })
 
     React.useEffect(async () => {
@@ -86,7 +91,16 @@ const ShoppingCart = () => {
                 })
             }
         } catch(e) {
-            console.log('aa')
+            setState({
+                ...state,
+                popup: true,
+                popupInfo: {
+                    vertical: 'top',
+                    horizontal: 'center',
+                    color: 'error',
+                    message: 'Something went wrong...'
+                }
+            })
         }
 
     }, [])
@@ -116,6 +130,7 @@ const ShoppingCart = () => {
     return (
         <>
             <Header />
+            <AlertMessage state={state} setState={setState} />
             <div className={classes.root}>
                 <div className={classes.container}>
                     <h2>{title}</h2>

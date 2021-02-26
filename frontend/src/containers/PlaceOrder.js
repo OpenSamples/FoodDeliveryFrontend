@@ -7,6 +7,7 @@ import CardOrder from '../components/CardPlaceOrderItem'
 import axios from 'axios'
 import photo1 from '../assets/categories/1.jpg'
 import { useSelector } from 'react-redux';
+import AlertMessage from '../components/AlertMessage'
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -88,7 +89,11 @@ const PlaceOrder = (props) => {
         address: useSelector(state => state.user.addresses[0] || ''),
         phone: '',
         firstName: useSelector(state => state.user.firstName || ''),
-        lastName: useSelector(state => state.user.lastName || '')
+        lastName: useSelector(state => state.user.lastName || ''),
+        popup: false,
+        popupInfo: {
+
+        }
     })
 
 
@@ -111,7 +116,16 @@ const PlaceOrder = (props) => {
                 })
             }
         } catch(e) {
-            console.log('aa')
+            setState({
+                ...state,
+                popup: true,
+                popupInfo: {
+                    vertical: 'top',
+                    horizontal: 'center',
+                    color: 'error',
+                    message: 'Something went wrong while fetching shopping cart items...'
+                }
+            })
         }
 
     }, [])
@@ -166,10 +180,18 @@ const PlaceOrder = (props) => {
                 })
 
                 // Redirect
-                props.history.push('/')
+                props.history.push('/success')
             }
         } catch(e) {
-            console.log(e)
+            setState({
+                popup: true,
+                popupInfo: {
+                    vertical: 'top',
+                    horizontal: 'center',
+                    color: 'error',
+                    message: 'Something went wrong...'
+                }
+            })
         }
 
 
@@ -178,6 +200,7 @@ const PlaceOrder = (props) => {
     return (
         <>
             <Header />
+            <AlertMessage state={state} setState={setState} />
             <div className={classes.root}>
                 <div className={classes.container}>
                     <h4>Items in shopping cart (scroll to view more)</h4>

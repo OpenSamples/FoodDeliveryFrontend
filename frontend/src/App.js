@@ -18,7 +18,7 @@ import ForgotPassword from './containers/ForgotPassword'
 import ProductCategories from './containers/Categories'
 
 function App() {
-  axios.defaults.baseURL = 'http://localhost:5000/';
+  axios.defaults.baseURL = 'http://localhost:3000/';
   axios.defaults.headers.common['Authorization'] = `Bearer ${useSelector(state => state.user.token)}`
 
   const logged = useSelector(state => !!state.user._id) ? 
@@ -40,6 +40,9 @@ function App() {
   return (
     <>
       <Route path="/" exact component={Home} />
+      <Route path="/success" exact>
+        <Home success />
+      </Route>
       <Route path="/menu" component={Menu} />
       <Route path="/about" component={About} />
       <Route path="/contact" component={Contact} />

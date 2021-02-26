@@ -1,11 +1,13 @@
 import React from 'react'
-import Header from '../components/Header'
-import Footer from '../components/Footer'
+import { Link } from 'react-router-dom'
 import { makeStyles } from "@material-ui/core/styles";
 import contactUsEmail from '../assets/email.png'
-import { TextField, Button, Typography } from '@material-ui/core';
+import { TextField, Button, Typography, IconButton } from '@material-ui/core';
 import axios from 'axios'
 import { useDispatch } from 'react-redux'
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import AlertMessage from '../components/AlertMessage'
+
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -51,6 +53,11 @@ const useStyles = makeStyles(() => ({
         display:"grid",
         gridTemplateColumns:"1fr 1fr",
         margin:"20px"
+    },
+    homepage: {
+        margin: '10px',
+        color: 'rgba(0, 0, 0, 0.54)',
+        textDecoration: 'none'
     }
 }));
 
@@ -61,7 +68,11 @@ const TwoStep = (props) => {
 
     const [state, setState] = React.useState({
         token: props.match.params.token,
-        code: ''
+        code: '',
+        popup: false,
+        popupInfo: {
+
+        }
     })
 
     const changeCode = (event) => {
@@ -78,7 +89,7 @@ const TwoStep = (props) => {
                 url: `/api/users/verify_2fa/${state.token}?code=${+state.code}`
             })
 
-            if(codeValid.data.message === 'Successfully!') {
+            if(codeValid.data.message && codeValid.data.message === 'Successfully!') {
                 // Logged in
                 dispatch({
                     type: 'login',
@@ -86,12 +97,33 @@ const TwoStep = (props) => {
                 })
 
                 // Redirect
-                props.history.push('/')
+                props.history.push('/success')
             } else {
                 // Not logged in
+
+                setState({
+                    ...state,
+                    popup: true,
+                    popupInfo: {
+                        horizontal: 'center',
+                        vertical: 'top',
+                        color: 'error',
+                        message: 'Wrong code!'
+                    }
+                })
             }
         } catch(e) {
-            console.log(e)
+
+            setState({
+                ...state,
+                popup: true,
+                popupInfo: {
+                    horizontal: 'center',
+                    vertical: 'top',
+                    color: 'error',
+                    message: 'Something went wrong...'
+                }
+            })
         }
 
         
@@ -101,9 +133,16 @@ const TwoStep = (props) => {
         props.history.push('/')
     }
 
+
     return (
         <>
-            <Header />
+            <AlertMessage state={state} setState={setState} />
+            <Link to="/" className={classes.homepage}>
+                <IconButton>
+                    <ArrowBackIcon />
+                </IconButton>
+                Back to homepage
+            </Link>
             <div className={classes.root}>
                 <div className={classes.contact_us_div}>
                     <Typography className={classes.title}>2-Step Verification</Typography>
@@ -116,7 +155,6 @@ const TwoStep = (props) => {
                     </form>
                 </div>
             </div>
-            <Footer />
         </>
     )
 }

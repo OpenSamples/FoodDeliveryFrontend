@@ -11,6 +11,7 @@ import Comment from '../components/Comment'
 import photo1 from '../assets/categories/1.jpg'
 import axios from 'axios'
 import { host } from '../config/config'
+import AlertMessage from '../components/AlertMessage'
 
 const useStyles = makeStyles(() => ({
     productInfo: {
@@ -93,7 +94,11 @@ const SingleProduct = (props) => {
         id: props.match.params.id,
         product: {},
         qty: 1,
-        btn_disabled: false
+        btn_disabled: false,
+        popup: false,
+        popupInfo: {
+
+        }
     })
 
     React.useEffect(async () => {
@@ -110,9 +115,30 @@ const SingleProduct = (props) => {
                     ...state,
                     product: productData
                 })
+            } else {
+                setState({
+                    ...state,
+                    popup: true,
+                    popupInfo: {
+                        vertical: 'top',
+                        horizontal: 'center',
+                        color: 'error',
+                        message: 'Something went wrong while fetching product...'
+                    }
+                })
             }
         } catch(e) {
-
+            
+            setState({
+                ...state,
+                popup: true,
+                popupInfo: {
+                    vertical: 'top',
+                    horizontal: 'center',
+                    color: 'error',
+                    message: 'Something went wrong...'
+                }
+            })
         }
         
     }, [])
@@ -144,11 +170,28 @@ const SingleProduct = (props) => {
                 // Product is successfully added to cart
                 setState({
                     ...state,
-                    btn_disabled: true
+                    btn_disabled: true,
+                    popup: true,
+                    popupInfo: {
+                        vertical: 'top',
+                        horizontal: 'center',
+                        color: 'success',
+                        message: 'Product added to cart!'
+                    }
                 })
+                
             }
         } catch(e) {
-            console.log(e)
+            setState({
+                ...state,
+                popup: true,
+                popupInfo: {
+                    vertical: 'top',
+                    horizontal: 'center',
+                    color: 'error',
+                    message: 'Failed to add product to cart!'
+                }
+            })
         }
     }
 
@@ -200,6 +243,7 @@ const SingleProduct = (props) => {
     return (
         <>
             <Header />
+            <AlertMessage state={state} setState={setState} />
             <div className={classes.container}>
                 {body()}
             </div>

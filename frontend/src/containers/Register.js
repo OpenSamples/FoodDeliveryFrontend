@@ -7,6 +7,7 @@ import { useDispatch } from 'react-redux'
 import { TextField, Button, Typography, IconButton } from "@material-ui/core";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import logo from "../assets/logo.png";
+import AlertMessage from '../components/AlertMessage'
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -77,7 +78,13 @@ const Register = (props) => {
       [event.target.name]: event.target.value
     })
   }
+ 
+  const [state, setState] = React.useState({
+    popup: false,
+    popupInfo: {
 
+    }
+  })
 
   const registerUser = async (event) => {
     event.preventDefault()
@@ -94,23 +101,49 @@ const Register = (props) => {
         }
       })
 
-      dispatch({
-        type: login,
-        user: data.data.user
-      })
+      
+      if(data.data.message === "Successfully!") {
+        dispatch({
+          type: login,
+          user: data.data.user
+        })
+        
 
-      // Redirect
-      props.history.push('/')
+        // Redirect
+        props.history.push('/success')
+      } else {
+        setState({
+          ...state,
+          popup: true,
+          popupInfo: {
+              horizontal: 'center',
+              vertical: 'top',
+              color: 'error',
+              message: 'Something went wrong!'
+          }
+        })
+      }
+
       
       // alert('registered!')
     } catch(e) {
-      alert('error')
+      setState({
+        ...state,
+        popup: true,
+        popupInfo: {
+            horizontal: 'center',
+            vertical: 'top',
+            color: 'error',
+            message: 'Something went wrong!'
+        }
+      })
     }
   }
 
 
   return (
     <>
+      <AlertMessage state={state} setState={setState} />
       <Link to="/" className={classes.homepage}>
         <IconButton>
           <ArrowBackIcon />

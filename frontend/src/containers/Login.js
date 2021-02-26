@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom'
 import logo from '../assets/logo.png'
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import { login } from '../store/actions'
+import AlertMessage from '../components/AlertMessage'
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -81,8 +82,7 @@ const Login = (props) => {
                 }
             });
         
-
-            if(data.data.message === 'Successfully logged in!') {
+            if(data.data.message && data.data.message === 'Successfully logged in!') {
                 // alert('Logged in!')
                 dispatch({
                     type: 'login',
@@ -90,16 +90,35 @@ const Login = (props) => {
                 })
 
                 // Redirect
-                props.history.push('/')
-            } else if(data.data.message.startsWith('User uses 2 factor authentication.')) {
+                props.history.push('/success')
+            } else if(data.data.message && data.data.message.startsWith('User uses 2 factor authentication.')) {
                 props.history.push('/two-step-verification/' + data.data.token)
             } else {
-                alert('Wrong creds!')
+                // alert('Wrong creds!')
+                setState({
+                    ...state,
+                    popup: true,
+                    popupInfo: {
+                        horizontal: 'center',
+                        vertical: 'top',
+                        color: 'error',
+                        message: 'Wrong credentials!'
+                    }
+                })
             }
               
         } catch(e) {
-            // console.log(e)
-            alert('error')
+            setState({
+                ...state,
+                popup: true,
+                popupInfo: {
+                    horizontal: 'center',
+                    vertical: 'top',
+                    color: 'error',
+                    message: 'Something went wrong...'
+                }
+            })
+
         }
         // console.log(user)
     }
@@ -111,8 +130,34 @@ const Login = (props) => {
         })
     }
 
+    const loginGoogle = async () => {
+        try {
+            // let googleLogin = await axios({
+            //     method: 'get',
+            //     url: '/api/users/google'
+            // })
+            let referenceToNewWindow = window.open('http://localhost:3000/api/users/google', 'googleLogin', "width=340px,height=450px,scrollbars=yes,toolbar=no" );
+
+
+            referenceToNewWindow.onload = () => {
+                console.log('aa')
+            }
+        } catch(e) {
+
+        }
+    }
+
+    const [state, setState] = React.useState({
+        popup: false,
+        popupInfo: {
+
+        }
+    })
+
+
     return (
         <>
+            <AlertMessage state={state} setState={setState} />
             <Link to="/" className={classes.homepage}>
                 <IconButton>
                     <ArrowBackIcon />
@@ -126,7 +171,10 @@ const Login = (props) => {
                     <TextField onChange={updateUser} required name="password" className={classes.input} label="Your password" type="password" />
                     <Button type="submit" className={classes.button} variant="contained" color="primary">Login</Button>
                     <Typography className={classes.textColor}>Or sign in with...</Typography>
-                    <Link className={classes.google} to="/login-google">Google</Link>
+                    <Button className={classes.google}
+                        onClick={loginGoogle}
+                        color="primary" variant="contained"
+                        >Google</Button>
                     <Typography className={classes.textColor}>Does not have an account? <Link className={classes.a} to="/register">Sign-up now</Link></Typography>
                     <Typography className={classes.textColor}>Forgot password?<Link className={classes.a} to="/forgot-password"> Reset now</Link></Typography>
                 </form>

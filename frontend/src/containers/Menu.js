@@ -9,11 +9,7 @@ import Footer from '../components/Footer'
 import Card from '../components/Card'
 import Filters from '../components/Filters'
 import { products as productAction } from '../store/actions/'
-import photo1 from '../assets/categories/1.jpg'
-import photo2 from '../assets/categories/2.jpeg'
-import photo3 from '../assets/categories/3.jpg'
-import photo4 from '../assets/categories/4.jpg'
-import photo5 from '../assets/categories/5.jpg'
+import AlertMessage from '../components/AlertMessage'
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -41,148 +37,6 @@ const useStyles = makeStyles((theme) => ({
     } 
 }))
 
-// let products = [
-//     {
-//         image: photo1,
-//         alt: 'Photo 1',
-//         name: 'Product 1',
-//         description: 'Description for product 1',
-//         category: 'Category 2'
-//     },
-//     {
-//         image: photo2,
-//         alt: 'Photo 2',
-//         name: 'Product 2',
-//         description: 'Description for product 2',
-//         category: 'Category 2'
-//     },
-//     {
-//         image: photo3,
-//         alt: 'Photo 3',
-//         name: 'Product 3',
-//         description: 'Description for product 3',
-//         category: 'Category 2'
-//     },
-//     {
-//         image: photo4,
-//         alt: 'Photo 4',
-//         name: 'Product 4',
-//         description: 'Description for product 4',
-//         category: 'Category 2'
-//     },
-//     {
-//         image: photo5,
-//         alt: 'Photo 5',
-//         name: 'Product 5',
-//         description: 'Description for product 5',
-//         category: 'Category 2'
-//     },
-//     {
-//         image: photo1,
-//         alt: 'Photo 1',
-//         name: 'Product 1',
-//         description: 'Description for product 1',
-//         category: 'Category 2'
-//     },
-//     {
-//         image: photo2,
-//         alt: 'Photo 2',
-//         name: 'Product 2',
-//         description: 'Description for product 2',
-//         category: 'Category 2'
-//     },
-//     {
-//         image: photo3,
-//         alt: 'Photo 3',
-//         name: 'Product 3',
-//         description: 'Description for product 3',
-//         category: 'Category 2'
-//     },
-//     {
-//         image: photo4,
-//         alt: 'Photo 4',
-//         name: 'Product 4',
-//         description: 'Description for product 4',
-//         category: 'Category 2'
-//     },
-//     {
-//         image: photo5,
-//         alt: 'Photo 5',
-//         name: 'Product 5',
-//         description: 'Description for product 5',
-//         category: 'Category 2'
-//     },
-//     {
-//         image: photo1,
-//         alt: 'Photo 1',
-//         name: 'Product 1',
-//         description: 'Description for product 1',
-//         category: 'Category 2'
-//     },
-//     {
-//         image: photo2,
-//         alt: 'Photo 2',
-//         name: 'Product 2',
-//         description: 'Description for product 2',
-//         category: 'Category 2'
-//     },
-//     {
-//         image: photo3,
-//         alt: 'Photo 3',
-//         name: 'Product 3',
-//         description: 'Description for product 3',
-//         category: 'Category 2'
-//     },
-//     {
-//         image: photo4,
-//         alt: 'Photo 4',
-//         name: 'Product 4',
-//         description: 'Description for product 4',
-//         category: 'Category 2'
-//     },
-//     {
-//         image: photo5,
-//         alt: 'Photo 5',
-//         name: 'Product 5',
-//         description: 'Description for product 5',
-//         category: 'Category 2'
-//     },
-//     {
-//         image: photo1,
-//         alt: 'Photo 1',
-//         name: 'Product 1',
-//         description: 'Description for product 1',
-//         category: 'Category 2'
-//     },
-//     {
-//         image: photo2,
-//         alt: 'Photo 2',
-//         name: 'Product 2',
-//         description: 'Description for product 2',
-//         category: 'Category 2'
-//     },
-//     {
-//         image: photo3,
-//         alt: 'Photo 3',
-//         name: 'Product 3',
-//         description: 'Description for product 3',
-//         category: 'Category 2'
-//     },
-//     {
-//         image: photo4,
-//         alt: 'Photo 4',
-//         name: 'Product 4',
-//         description: 'Description for product 4',
-//         category: 'Category 2'
-//     },
-//     {
-//         image: photo5,
-//         alt: 'Photo 5',
-//         name: 'Product 5',
-//         description: 'Description for product 5',
-//         category: 'Category 2'
-//     }
-// ]
 
 const Menu = () => {
     const classes = useStyles()
@@ -218,9 +72,16 @@ const Menu = () => {
         } catch(e) {
             setState({
                 ...state,
-                msg: 'Something went wrong...'
+                msg: 'Something went wrong...',
+                popup: true,
+                popupInfo: {
+                    vertical: 'top',
+                    horizontal: 'center',
+                    color: 'error',
+                    message: 'Something went wrong...'
+                }
             })
-            alert('error')
+
         }
     }, [])   
 
@@ -249,7 +110,11 @@ const Menu = () => {
         chunkProducts: getChunk(products, 10),
         productsPage: 0,
         message: '',
-        msg: 'Loading...'
+        msg: 'Loading...',
+        popup: false,
+        popupInfo: {
+
+        }
     })
 
     const changePage = (event, value) => {
@@ -259,9 +124,11 @@ const Menu = () => {
         })
     }
 
+
     return (
         <>
             <Header />
+            <AlertMessage state={state} setState={setState} />
             <div className={classes.container}>
                 <Filters state={state} setState={setState} getChunk={getChunk} products={products} />
                 <div className={classes.productContainer}>
