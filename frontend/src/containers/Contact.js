@@ -4,6 +4,8 @@ import Footer from '../components/Footer'
 import { makeStyles } from "@material-ui/core/styles";
 import contactUsEmail from '../assets/email.png'
 import { TextField, Button, Typography } from '@material-ui/core';
+import axios from 'axios'
+import AlertMessage from '../components/AlertMessage'
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -22,7 +24,8 @@ const useStyles = makeStyles(() => ({
         display: "grid",
         gridTemplateColumns: "1fr 1fr",
         width: "60%",
-        margin: "auto",
+        margin: "150px auto",
+        height: '450px',
         borderRadius: "10px",
         boxShadow:"6px 7px 4px 1px rgba(0,0,0,0.75);"
     },
@@ -46,7 +49,7 @@ const useStyles = makeStyles(() => ({
     },
     textarea: {
         resize: "none",
-        margin: "10px",
+        margin: "10px 20px",
         outline: "none",
         border: "1px solid #ccc",
         borderRadius: "10px",
@@ -58,8 +61,8 @@ const useStyles = makeStyles(() => ({
         margin: "auto"
     },
     input: {
-        margin: "10px",
-        padding:"10px"
+        margin: "10px 20px",
+        // padding:"10px"
     },
     left_text1:{
         color:"white"
@@ -77,9 +80,79 @@ const useStyles = makeStyles(() => ({
 
 const Contact = () => {
     const classes = useStyles();
+
+    const [state, setState] = React.useState({
+        name: '',
+        email: '',
+        message: '',
+        popup: false,
+        popupInfo: {
+
+        }
+    })
+
+    const sendMail = async (event) => {
+        event.preventDefault()
+
+        try {
+            let response = await axios({
+                method: 'post',
+                url: '/api/users/contact_form/contact',
+                data: {
+                    name: state.name,
+                    email: state.email,
+                    message: state.message
+                }
+            })
+
+            if(response.data.message && response.data.message === 'Successfully') {
+                setState({
+                    ...state,
+                    popup: true,
+                    popupInfo: {
+                        vertical: 'top',
+                        horizontal: 'center',
+                        color: 'success',
+                        message: 'Successfully'
+                    }
+                })
+            } else {
+                setState({
+                    ...state,
+                    popup: true,
+                    popupInfo: {
+                        vertical: 'top',
+                        horizontal: 'center',
+                        color: 'error',
+                        message: 'Something went wrong...'
+                    }
+                })
+            }
+        } catch(e) {
+            setState({
+                ...state,
+                popup: true,
+                popupInfo: {
+                    vertical: 'top',
+                    horizontal: 'center',
+                    color: 'error',
+                    message: 'Something went wrong...'
+                }
+            })
+        }
+    }
+
+    const changeInput = event => {
+        setState({
+            ...state,
+            [event.target.name]: event.target.value
+        })
+    }
+
     return (
         <>
             <Header />
+            <AlertMessage state={state} setState={setState} />
             <div className={classes.root}>
                 <div className={classes.contact_us_div}>
                     <div className={classes.contact_us_div_left}>
@@ -92,11 +165,11 @@ const Contact = () => {
                           </div>  
                     </div>
                     <div className={classes.contact_us_div_right}>
-                        <form className={classes.container}>
-                            <TextField required name="name" className={classes.input} label="Your name..." type="text" />
-                            <TextField required name="email" className={classes.input} label="Your email..." type="email" />
-                            <textarea name="message" cols="20" rows="10" required className={classes.textarea} placeholder="Your message..."></textarea>
-                            <Button className={classes.button} variant="contained" color="primary">Send</Button>
+                        <form className={classes.container} onSubmit={sendMail}>
+                            <TextField onChange={changeInput} value={state.name} required name="name" className={classes.input} label="Your name..." type="text" />
+                            <TextField onChange={changeInput} value={state.email} required name="email" className={classes.input} label="Your email..." type="email" />
+                            <textarea onChange={changeInput} value={state.message} name="message" cols="20" rows="10" required className={classes.textarea} placeholder="Your message..."></textarea>
+                            <Button type="submit" className={classes.button} variant="contained" color="primary">Send</Button>
                         </form>
                     </div>
                 </div>
