@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import { TextField, Button, Typography, IconButton, FormControl, InputLabel, Select } from '@material-ui/core';
 import { Link } from 'react-router-dom'
 import axios from 'axios'
+import AlertMessage from '../AlertMessage'
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -39,7 +40,11 @@ const CreateProduct = () => {
         detail: '',
         price: '',
         categoryId: '',
-        image: ''
+        image: '',
+        popup: false,
+        popupInfo: {
+
+        }
     })
 
     React.useEffect( async () => {
@@ -56,7 +61,16 @@ const CreateProduct = () => {
                 })
             }
         } catch(e) {
-
+            setState({
+                ...state,
+                popup: true,
+                popupInfo: {
+                    vertical: 'top',
+                    horizontal: 'center',
+                    color: 'error',
+                    message: 'Something went wrong while fetching categories...'
+                }
+            })
         }
     }, [])
 
@@ -96,17 +110,46 @@ const CreateProduct = () => {
             
             if(data.data._id) {
                 // Product created
-                alert('Product added')
+                setState({
+                    ...state,
+                    popup: true,
+                    popupInfo: {
+                        vertical: 'top',
+                        horizontal: 'center',
+                        color: 'success',
+                        message: 'Product created!'
+                    }
+                })
             } else {
                 // Product not created
+                setState({
+                    ...state,
+                    popup: true,
+                    popupInfo: {
+                        vertical: 'top',
+                        horizontal: 'center',
+                        color: 'error',
+                        message: 'Something went wrong while creating product'
+                    }
+                })
             }
         } catch(e) {
-            console.log(e)
+            setState({
+                ...state,
+                popup: true,
+                popupInfo: {
+                    vertical: 'top',
+                    horizontal: 'center',
+                    color: 'error',
+                    message: 'Something went wrong...'
+                }
+            })
         }
     }
 
     return (
         <div className={classes.root}>
+            <AlertMessage state={state} setState={setState} />
             <form className={classes.container} onSubmit={createProduct} encType="multipart/form-data">
                 <TextField
                     required

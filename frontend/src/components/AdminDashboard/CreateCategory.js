@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import { TextField, Button, Typography, IconButton } from '@material-ui/core';
 import { Link } from 'react-router-dom'
 import axios from 'axios'
+import AlertMessage from '../AlertMessage'
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -36,7 +37,11 @@ const CreateCategory = () => {
 
     const [state, setState] = React.useState({
         name: '',
-        image: ''
+        image: '',
+        popup: false,
+        popupInfo: {
+
+        }
     })
 
     const updateInput = event => {
@@ -73,17 +78,46 @@ const CreateCategory = () => {
             
             if(data.data._id) {
                 // Category created
-                alert('Category added')
+                setState({
+                    ...state,
+                    popup: true,
+                    popupInfo: {
+                        vertical: 'top',
+                        horizontal: 'center',
+                        color: 'success',
+                        message: 'Category created!'
+                    }
+                })
             } else {
                 // Category not created
+                setState({
+                    ...state,
+                    popup: true,
+                    popupInfo: {
+                        vertical: 'top',
+                        horizontal: 'center',
+                        color: 'error',
+                        message: 'Something went wrong while creating category!'
+                    }
+                })
             }
         } catch(e) {
-            console.log(e)
+            setState({
+                ...state,
+                popup: true,
+                popupInfo: {
+                    vertical: 'top',
+                    horizontal: 'center',
+                    color: 'error',
+                    message: 'Something went wrong...'
+                }
+            })
         }
     }
 
     return (
         <div className={classes.root}>
+            <AlertMessage state={state} setState={setState} />
             <form className={classes.container} onSubmit={createCategory}>
                 <TextField
                     required

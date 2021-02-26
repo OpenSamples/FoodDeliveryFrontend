@@ -11,6 +11,8 @@ import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import { Button, Typography } from "@material-ui/core";
 import axios from 'axios'
+import AlertMessage from '../AlertMessage'
+
 
 const useStyles = makeStyles(() => ({
   body: {
@@ -38,7 +40,11 @@ export default function AdminEditProducts(props) {
 
   const [state, setState] = useState({
     logged: true,
-    products: []
+    products: [],
+    popup: false,
+    popupInfo: {
+
+    }
   });
 
   React.useEffect(async () => {
@@ -55,7 +61,16 @@ export default function AdminEditProducts(props) {
         })
       }
     } catch(e) {
-
+      setState({
+        ...state,
+        popup: true,
+        popupInfo: {
+          vertical: 'top',
+          horizontal: 'center',
+          color: 'error',
+          message: 'Something went wrong while fetching products...'
+        }
+      })
     }
   }, [])
 
@@ -70,12 +85,28 @@ export default function AdminEditProducts(props) {
       if(deletedProduct.data.deletedCount) {
         setState({
           ...state,
-          products: state.products.filter(product => product._id !== id)
+          products: state.products.filter(product => product._id !== id),
+          popup: true,
+          popupInfo: {
+            vertical: 'top',
+            horizontal: 'center',
+            color: 'success',
+            message: 'Successfully deleted product'
+          }
         })
       }
 
     } catch(e) {
-
+      setState({
+        ...state,
+        popup: true,
+        popupInfo: {
+          vertical: 'top',
+          horizontal: 'center',
+          color: 'error',
+          message: 'Something went wrong while deleting product...'
+        }
+      })
     }
   }
 
@@ -88,6 +119,7 @@ export default function AdminEditProducts(props) {
 
   return (
       <div className={classes.body}>
+        <AlertMessage state={state} setState={setState} />
         <span className={classes.spaceBetween}>
           <Typography className={classes.textColor}>All Products:</Typography>
           <Link to="/admin-dashboard/create-product" onClick={changePage}>
