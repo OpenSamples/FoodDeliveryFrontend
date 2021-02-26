@@ -17,6 +17,8 @@ import AdminDashboard from './containers/AdminDashboard'
 import ForgotPassword from './containers/ForgotPassword'
 import ProductCategories from './containers/Categories'
 import ResetPassword from "./containers/ResetPassword";
+import OrdersHistory from './containers/OrdersHistory'
+
 
 function App() {
   axios.defaults.baseURL = 'http://localhost:3000/';
@@ -52,6 +54,7 @@ function App() {
       <Route path="/forgot-password" component={ForgotPassword} />
       <Route path="/reset-password/:token" component={ResetPassword} />
       <Route path="/category/:id" component={ProductCategories} />
+      <Route path="/ordersHistory" component={OrdersHistory} />
       {logged}
       {isAdmin}
     </>
