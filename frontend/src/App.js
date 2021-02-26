@@ -16,6 +16,7 @@ import TwoStep from './containers/TwoStep'
 import AdminDashboard from './containers/AdminDashboard'
 import ForgotPassword from './containers/ForgotPassword'
 import ProductCategories from './containers/Categories'
+import ResetPassword from "./containers/ResetPassword";
 
 function App() {
   axios.defaults.baseURL = 'http://localhost:3000/';
@@ -49,6 +50,7 @@ function App() {
       <Route path="/product/:id" component={SingleProduct} />
       <Route path="/two-step-verification/:token" component={TwoStep} />
       <Route path="/forgot-password" component={ForgotPassword} />
+      <Route path="/reset-password/:token" component={ResetPassword} />
       <Route path="/category/:id" component={ProductCategories} />
       {logged}
       {isAdmin}
