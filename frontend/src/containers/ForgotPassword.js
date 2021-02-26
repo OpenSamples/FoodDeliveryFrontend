@@ -5,6 +5,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import contactUsEmail from '../assets/email.png'
 import { TextField, Button, Typography } from '@material-ui/core';
 import LockIcon from '@material-ui/icons/Lock';
+import axios from 'axios'
+import AlertMessage from '../components/AlertMessage'
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -75,9 +77,64 @@ const ColoredLine = ({ color }) => (
 
 const TwoStep = () => {
     const classes = useStyles();
+    
+    const [state, setState] = React.useState({
+        email: '',
+        popup: false,
+        popupInfo: {
+
+        }
+    })
+
+    const sendResetLink = async (event) => {
+        event.preventDefault()
+        try {
+            let response = await axios({
+                method: 'post',
+                url: '/api/users/reset-password/' + state.email
+            })
+
+            if(response.data.message === 'Reset link sent!') {
+                setState({
+                    ...state,
+                    popup: true,
+                    popupInfo: {
+                        vertical: 'top',
+                        horizontal: 'center',
+                        color: 'success',
+                        message: 'Reset link sent...'
+                    }
+                })
+            } else {
+                setState({
+                    ...state,
+                    popup: true,
+                    popupInfo: {
+                        vertical: 'top',
+                        horizontal: 'center',
+                        color: 'error',
+                        message: 'Something went wrong...'
+                    }
+                })
+            }
+        } catch(e) {
+            setState({
+                ...state,
+                popup: true,
+                popupInfo: {
+                    vertical: 'top',
+                    horizontal: 'center',
+                    color: 'error',
+                    message: 'Something went wrong...'
+                }
+            })
+        }
+    }
+
     return (
         <>
             <Header />
+            <AlertMessage state={state} setState={setState} />
             <div className={classes.root}>
                 <div className={classes.contact_us_div}>
                     <div className={classes.titleContainer}>
@@ -86,11 +143,11 @@ const TwoStep = () => {
                         <Typography className={classes.title2}>Reset it now, You just need to provide us your email address.</Typography>
                         <ColoredLine color="gray" />
                     </div>
-                    <form className={classes.container}>
+                    <form className={classes.container} onSubmit={sendResetLink}>
                         <LockIcon className={classes.lock}></LockIcon>
-                        <TextField required name="code" className={classes.input} label="Enter your email" type="email" />
+                        <TextField required name="email" value={state.email} onChange={event => setState({...state, email: event.target.value})} className={classes.input} label="Enter your email" type="email" />
                         <div className={classes.buttons}>
-                            <Button className={classes.button} variant="contained" color="secondary">Send Reset Link</Button>
+                            <Button type="submit" className={classes.button} variant="contained" color="secondary">Send Reset Link</Button>
                         </div>
                     </form>
                 </div>

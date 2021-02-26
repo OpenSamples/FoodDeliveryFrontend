@@ -11,6 +11,8 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import { Button, Typography } from "@material-ui/core";
+import AlertMessage from '../AlertMessage'
+
 
 const useStyles = makeStyles(() => ({
   body: {
@@ -37,7 +39,11 @@ export default function AdminEditCategories(props) {
 
   const [state, setState] = useState({
     logged: true,
-    categories: []
+    categories: [],
+    popup: false,
+    popupInfo: {
+
+    }
   });
 
   React.useEffect(async () => {
@@ -54,7 +60,16 @@ export default function AdminEditCategories(props) {
         })
       }
     } catch(e) {
-
+      setState({
+        ...state,
+        popup: true,
+        popupInfo: {
+          vertical: 'top',
+          horizontal: 'center',
+          color: 'error',
+          message: 'Something went wrong while fetching categories...'
+        }
+      })
     }
 
   }, [])
@@ -71,12 +86,28 @@ export default function AdminEditCategories(props) {
       if(deletedCategory.data.deletedCount) {
         setState({
           ...state,
-          categories: state.categories.filter(category => category._id !== id)
+          categories: state.categories.filter(category => category._id !== id),
+          popup: true,
+          popupInfo: {
+            vertical: 'top',
+            horizontal: 'center',
+            color: 'success',
+            message: 'Successfully deleted category...'
+          }
         })
       }
 
     } catch(e) {
-
+      setState({
+        ...state,
+        popup: true,
+        popupInfo: {
+          vertical: 'top',
+          horizontal: 'center',
+          color: 'error',
+          message: 'Something went wrong while deleting category...'
+        }
+      })
     }
   }
 
@@ -89,6 +120,7 @@ export default function AdminEditCategories(props) {
 
   return (
       <div className={classes.body}>
+        <AlertMessage state={state} setState={setState} />
         <span className={classes.spaceBetween}>
           <Typography className={classes.textColor}>All Categories:</Typography>
           <Link to="/admin-dashboard/create-category" onClick={changePage}>

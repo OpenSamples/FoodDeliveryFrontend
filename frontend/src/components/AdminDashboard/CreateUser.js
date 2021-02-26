@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import { TextField, Button, Typography, IconButton } from '@material-ui/core';
 import { Link } from 'react-router-dom'
 import axios from 'axios'
+import AlertMessage from '../AlertMessage'
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -38,7 +39,11 @@ const CreateUser = () => {
         lastName: '',
         email: '',
         password: '',
-        image: ''
+        image: '',
+        popup: false,
+        popupInfo: {
+
+        }
     })
 
     const updateInput = event => {
@@ -74,20 +79,48 @@ const CreateUser = () => {
                 }
             }); 
            
-            console.log(data)
             if(data.data.user._id) {
                 // User created
-                alert('User added')
+                setState({
+                    ...state,
+                    popup: true,
+                    popupInfo: {
+                        vertical: 'top',
+                        horizontal: 'center',
+                        color: 'success',
+                        message: 'User created!'
+                    }
+                })
             } else {
                 // User not created
+                setState({
+                    ...state,
+                    popup: true,
+                    popupInfo: {
+                        vertical: 'top',
+                        horizontal: 'center',
+                        color: 'error',
+                        message: 'Something went wrong while creating user...'
+                    }
+                })
             }
         } catch(e) {
-            console.log(e)
+            setState({
+                ...state,
+                popup: true,
+                popupInfo: {
+                    vertical: 'top',
+                    horizontal: 'center',
+                    color: 'error',
+                    message: 'Something went wrong...'
+                }
+            })
         }
     }
 
     return (
         <div className={classes.root}>
+            <AlertMessage state={state} setState={setState} />
             <form className={classes.container} onSubmit={createUser}>
                 <TextField
                     required

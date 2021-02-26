@@ -18,6 +18,7 @@ import ForgotPassword from './containers/ForgotPassword'
 import ProductCategories from './containers/Categories'
 import ResetPassword from "./containers/ResetPassword";
 import OrdersHistory from './containers/OrdersHistory'
+import ChangePassword from './containers/ChangePassword'
 
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
         (
           <>
             <Route path="/edit-profile" component={EditProfile} />
+            <Route path="/change-password" component={ChangePassword} />
             <Route path="/shopping-cart" component={ShoppingCart} />
             <Route path="/place-order" component={PlaceOrder} />
           </>

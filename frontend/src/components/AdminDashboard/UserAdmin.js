@@ -11,6 +11,7 @@ import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import { Button, Typography } from "@material-ui/core";
 import axios from 'axios'
+import AlertMessage from '../AlertMessage'
 
 const useStyles = makeStyles(() => ({
   body: {
@@ -37,7 +38,11 @@ const AdminEditUsers = (props) => {
 
   const [state, setState] = useState({
     logged: true,
-    users: []
+    users: [],
+    popup: false,
+    popupInfo: {
+
+    }
   });
 
   React.useEffect(async () => {
@@ -54,7 +59,16 @@ const AdminEditUsers = (props) => {
         })
       }
     } catch(e) {
-
+      setState({
+        ...state,
+        popup: true,
+        popupInfo: {
+          vertical: 'top',
+          horizontal: 'center',
+          color: 'error',
+          message: 'Something went wrong while fetching users...'
+        }
+      })
     }
 
   }, [])
@@ -70,12 +84,39 @@ const AdminEditUsers = (props) => {
       if(deletedUser.data.deletedCount) {
         setState({
           ...state,
-          users: state.users.filter(user => user._id !== id)
+          users: state.users.filter(user => user._id !== id),
+          popup: true,
+          popupInfo: {
+            vertical: 'top',
+            horizontal: 'center',
+            color: 'success',
+            message: 'Successfully deleted user...'
+          }
+        })
+      } else {
+        setState({
+          ...state,
+          popup: true,
+          popupInfo: {
+            vertical: 'top',
+            horizontal: 'center',
+            color: 'error',
+            message: 'Something went wrong while deleting user...'
+          }
         })
       }
 
     } catch(e) {
-
+      setState({
+        ...state,
+        popup: true,
+        popupInfo: {
+          vertical: 'top',
+          horizontal: 'center',
+          color: 'error',
+          message: 'Something went wrong while deleting user...'
+        }
+      })
     }
   }
 
@@ -88,6 +129,7 @@ const AdminEditUsers = (props) => {
 
   return (
       <div className={classes.body}>
+        <AlertMessage state={state} setState={setState} />
         <span className={classes.spaceBetween}>
           <Typography className={classes.textColor}>All Users:</Typography>
           <Link to="/admin-dashboard/create-user" onClick={changePage}>

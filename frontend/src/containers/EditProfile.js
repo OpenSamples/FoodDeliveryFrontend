@@ -1,5 +1,6 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
+import { Link } from 'react-router-dom'
 import { TextField, Button, Typography, IconButton, FormControlLabel, Checkbox } from '@material-ui/core';
 import { Avatar } from '@material-ui/core'
 import  { useSelector, useDispatch } from 'react-redux'
@@ -164,7 +165,9 @@ const EditProfile = () => {
                         }
                         label="2FactorAuth (2FA)"
                     />
-                    <Button className={classes.button} variant="outlined" color="primary">Change password</Button>
+                    <Link to="/change-password">
+                        <Button className={classes.button} variant="outlined" color="primary">Change password</Button>
+                    </Link>
                     <Button onClick={updateProfileInfo} className={classes.button} variant="contained" color="primary">Update</Button>
                 </div>
             </div>
