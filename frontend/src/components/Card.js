@@ -6,6 +6,7 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import axios from 'axios'
+import AlertMessage from './AlertMessage'
 
 const useStyles = makeStyles({
     root: {
@@ -23,6 +24,12 @@ const useStyles = makeStyles({
 const CardComponent = (props) => {
     const classes = useStyles()
 
+    const [state, setState] = React.useState({
+        popup: false,
+        popupInfo: {
+
+        }
+    })
 
     const addToCartFinish = async () => {
         try {
@@ -36,40 +43,63 @@ const CardComponent = (props) => {
     
             if(productCart.data.msg.startsWith('Product added to cart that belongs to user:')) {
                 // Product is successfully added to cart
+                setState({
+                    ...state,
+                    popup: true,
+                    popupInfo: {
+                        vertical: 'top',
+                        horizontal: 'center',
+                        color: 'success',
+                        message: 'Product added to cart!'
+                    }
+                })
             }
         } catch(e) {
-            console.log(e)
+            setState({
+                ...state,
+                popup: true,
+                popupInfo: {
+                    vertical: 'top',
+                    horizontal: 'center',
+                    color: 'error',
+                    message: 'Failed to add product to cart!'
+                }
+            })
         }
     }
 
     return (
-        <Card className={classes.root}>
-            <CardActionArea>
-                <CardMedia
-                    className={classes.media}
-                    image={props.image}
-                    title={props.alt}
-                />
-                <CardContent>
-                    <Typography gutterBottom variant="h5" component="h2">
-                        {props.name}
-                    </Typography>
-                    <Typography variant="body2" color="textSecondary" component="p">
-                        {props.description}
-                    </Typography>
-                </CardContent>
-            </CardActionArea>
-            <CardActions className={classes.actions}>
-                <Link to={'/product/' + props.productId}>
-                    <Button size="small" color="primary">
-                        View
+        <>
+            <AlertMessage state={state} setState={setState} />
+            <Card className={classes.root}>
+                <CardActionArea>
+                    <CardMedia
+                        className={classes.media}
+                        image={props.image}
+                        title={props.alt}
+                    />
+                    <CardContent>
+                        <Typography gutterBottom variant="h5" component="h2">
+                            {props.name}
+                        </Typography>
+                        <Typography variant="body2" color="textSecondary" component="p">
+                            {props.description}
+                        </Typography>
+                    </CardContent>
+                </CardActionArea>
+                <CardActions className={classes.actions}>
+                    <Link to={'/product/' + props.productId}>
+                        <Button size="small" color="primary">
+                            View
+                        </Button>
+                    </Link>
+                    <Button onClick={addToCartFinish} startIcon={<ShoppingCartIcon />} size="small" color="primary">
+                        Add to cart
                     </Button>
-                </Link>
-                <Button onClick={addToCartFinish} startIcon={<ShoppingCartIcon />} size="small" color="primary">
-                    Add to cart
-                </Button>
-            </CardActions>
-        </Card>
+                </CardActions>
+            </Card>
+        </>
+        
     )
 }
 

@@ -9,11 +9,8 @@ import Footer from '../components/Footer'
 import Card from '../components/Card'
 import Filters from '../components/Filters'
 import { products as productAction, productCategoriesAction } from '../store/actions/'
-import photo1 from '../assets/categories/1.jpg'
-import photo2 from '../assets/categories/2.jpeg'
-import photo3 from '../assets/categories/3.jpg'
-import photo4 from '../assets/categories/4.jpg'
-import photo5 from '../assets/categories/5.jpg'
+import AlertMessage from '../components/AlertMessage'
+
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -71,7 +68,11 @@ const Categories = (props) => {
         productsPage: 0,
         message: '',
         msg: 'Loading...',
-        id: props.match.params.id
+        id: props.match.params.id,
+        popup: false,
+        popupInfo: {
+            
+        }
     })
 
 
@@ -103,9 +104,15 @@ const Categories = (props) => {
         } catch(e) {
             setState({
                 ...state,
-                msg: 'Something went wrong...'
+                msg: 'Something went wrong...',
+                popup: true,
+                popupInfo: {
+                    vertical: 'top',
+                    horizontal: 'center',
+                    color: 'error',
+                    message: 'Something went wrong...'
+                }
             })
-            alert('error')
         }
     }, [])       
 
@@ -119,6 +126,7 @@ const Categories = (props) => {
     return (
         <>
             <Header />
+            <AlertMessage state={state} setState={setState} />
             <div className={classes.container}>
                 <Filters disableSelect state={state} setState={setState} getChunk={getChunk} products={products} />
                 <div className={classes.productContainer}>

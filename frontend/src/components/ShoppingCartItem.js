@@ -4,6 +4,7 @@ import { IconButton } from '@material-ui/core'
 import { host } from '../config/config'
 import { Delete, Remove, Add } from '@material-ui/icons'
 import axios from 'axios'
+import AlertMessage from './AlertMessage'
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -45,6 +46,13 @@ const useStyles = makeStyles(() => ({
 
 const ShoppingCartItem = props => {
     const classes = useStyles()
+
+    const [state, setState] = React.useState({
+        popup: true,
+        popupInfo: {
+
+        }
+    })
 
     const increaseQty = (val) => async () => {
         try {
@@ -93,37 +101,60 @@ const ShoppingCartItem = props => {
                     ...props.state,
                     items: props.state.items.filter(item => props.productId !== item.productId)
                 })
+                
+                setState({
+                    ...state,
+                    popup: true,
+                    popupInfo: {
+                        vertical: 'top',
+                        horizontal: 'center',
+                        color: 'success',
+                        message: 'Product removed from shopping cart!'
+                    }
+                })
             }
         } catch(e) {
-
+            setState({
+                ...state,
+                popup: true,
+                popupInfo: {
+                    vertical: 'top',
+                    horizontal: 'center',
+                    color: 'error',
+                    message: 'Failed to remove product from shopping cart!'
+                }
+            })
         }
     }
 
     return (
-        <div className={classes.root}>
-            <div className={classes.container}>
-                <div className={classes.details}>
-                    <span className={classes.title}>{props.name}</span>
-                    <p>{props.details}</p>
-                    <span className={classes.price}>${props.price} * {props.qty}</span>
+        <>
+            <AlertMessage state={state} setState={setState} />
+            <div className={classes.root}>
+                <div className={classes.container}>
+                    <div className={classes.details}>
+                        <span className={classes.title}>{props.name}</span>
+                        <p>{props.details}</p>
+                        <span className={classes.price}>${props.price} * {props.qty}</span>
+                    </div>
+                    <div className={classes.imageQty}>
+                        <span>
+                            <IconButton onClick={increaseQty(-1)}>
+                                <Remove />
+                            </IconButton>
+                            <span>{'   ' + props.qty + '   '}</span>
+                            <IconButton onClick={increaseQty(1)}>
+                                <Add />
+                            </IconButton>
+                        </span>
+                        <img src={host + props.thumbnail} alt={props.name} className={classes.thumbnail} />
+                    </div>
                 </div>
-                <div className={classes.imageQty}>
-                    <span>
-                        <IconButton onClick={increaseQty(-1)}>
-                            <Remove />
-                        </IconButton>
-                        <span>{'   ' + props.qty + '   '}</span>
-                        <IconButton onClick={increaseQty(1)}>
-                            <Add />
-                        </IconButton>
-                    </span>
-                    <img src={host + props.thumbnail} alt={props.name} className={classes.thumbnail} />
-                </div>
+                <IconButton onClick={deleteFromCart} color="secondary">
+                    <Delete />
+                </IconButton>
             </div>
-            <IconButton onClick={deleteFromCart} color="secondary">
-                <Delete />
-            </IconButton>
-        </div>
+        </>
     )
 }
 

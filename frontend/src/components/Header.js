@@ -114,6 +114,7 @@ const Header = (props) => {
         dispatch({
             type: logoutAction
         })
+
     }
 
     const loggedIn = () => {

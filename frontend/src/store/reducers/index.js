@@ -20,6 +20,7 @@ const reducer = (state = initialState, action) => {
     switch(action.type) {
         case 'login':
             localStorage.setItem('user', JSON.stringify(action.user));
+            // window.location.href = "/success";
             return {...state, user: action.user}
         case 'products':
             return {...state, products: action.products}
@@ -27,7 +28,15 @@ const reducer = (state = initialState, action) => {
             return {...state, productsPerCategory: action.products}
         case 'logout':
             localStorage.setItem('user', JSON.stringify({}))
+            window.location.href = "/success";
             return {...state, user: {}}
+        case 'updateUser':
+            let user = {
+                ...state.user,
+                ...action.user
+            }
+            localStorage.setItem('user', JSON.stringify(user))
+            return {...state, user}
         case 'popularProducts':
             return {...state, popularProducts: action.popularProducts}
         case 'categories':

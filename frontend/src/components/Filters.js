@@ -3,6 +3,7 @@ import { fade, makeStyles } from '@material-ui/core/styles'
 import { Button, Select, FormControl, InputLabel, InputBase } from '@material-ui/core'
 import SearchIcon from '@material-ui/icons/Search'
 import axios from 'axios'
+import AlertMessage from './AlertMessage'
 
 const useStyles = makeStyles((theme) => ({
     filters: {
@@ -63,7 +64,11 @@ const Filters = (props) => {
         category: '',
         searchText: '',
         message: '',
-        categories: []
+        categories: [],
+        popup: false,
+        popupInfo: {
+            
+        }
     })
 
     const filterProducts = () => {
@@ -110,7 +115,16 @@ const Filters = (props) => {
                 })
             }
         } catch(e) {
-
+            setState({
+                ...state,
+                popup: true,
+                popupInfo: {
+                    vertical: 'top',
+                    horizontal: 'center',
+                    color: 'error',
+                    message: 'Failed to fetch categories'
+                }
+            })
         }
     }, [])
 
@@ -130,6 +144,7 @@ const Filters = (props) => {
 
     return (
         <>
+            <AlertMessage state={state} setState={setState} />
             <div className={classes.filters}>
                 {
                     props.disableSelect ? 
