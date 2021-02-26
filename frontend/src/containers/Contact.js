@@ -114,7 +114,10 @@ const Contact = () => {
                         horizontal: 'center',
                         color: 'success',
                         message: 'Successfully'
-                    }
+                    },
+                    name: '',
+                    email: '',
+                    message: '.'
                 })
             } else {
                 setState({

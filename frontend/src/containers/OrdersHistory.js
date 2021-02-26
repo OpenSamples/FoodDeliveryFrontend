@@ -9,6 +9,8 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import axios from 'axios'
+import AlertMessage from '../components/AlertMessage'
 
 const useStyles = makeStyles({
     root: {
@@ -43,31 +45,79 @@ const useStyles = makeStyles({
         "&:nth-child(even)": {
             backgroundColor: "#ff5c33",
             color: "white"
-        },
-        "&:last-child": {
-            color:"green"
-        },
+        }
     }
 });
 
-function createData(name, orderDate, orderTotal, address, isCompleted) {
-    return { name, orderDate, orderTotal, address, isCompleted };
-}
+// function createData(name, orderDate, orderTotal, address, isCompleted) {
+//     return { name, orderDate, orderTotal, address, isCompleted };
+// }
 
-const rows = [
-    createData('Order1', "04.05.2021", 15, "Miodraga Bulatovica 12", " Completed"),
-    createData('Order2', "04.05.2021", 10, "Admirala Zmajevica 14", " Completed"),
-    createData('Order3', "01.11.2021", 45, "Josipa Broza 12", " Completed"),
-    createData('Order4', "12.03.2020", 5, "Admirala Zmjaevica 14", " Completed"),
-    createData('Order5', "04.04.2021", 16, "Admirala Zmajevica 14", " Completed"),
-];
+// const rows = [
+//     createData('Order1', "04.05.2021", 15, "Miodraga Bulatovica 12", " Completed"),
+//     createData('Order2', "04.05.2021", 10, "Admirala Zmajevica 14", " Completed"),
+//     createData('Order3', "01.11.2021", 45, "Josipa Broza 12", " Completed"),
+//     createData('Order4', "12.03.2020", 5, "Admirala Zmjaevica 14", " Completed"),
+//     createData('Order5', "04.04.2021", 16, "Admirala Zmajevica 14", " Completed"),
+// ];
 
-export default function BasicTable() {
+export default function BasicTable(props) {
     const classes = useStyles();
+
+    const [state, setState] = React.useState({
+        orders: [],
+        successMsg: true,
+        popup: false,
+        popupInfo: {
+
+        }
+    })
+
+    if(props.success && state.successMsg) {
+        setState({
+            ...state,
+            popup: true,
+            popupInfo: {
+                vertical: 'top',
+                horizontal: 'center',
+                color: 'success',
+                message: 'Successfully'
+            },
+            successMsg: false
+        })
+    }
+
+    React.useEffect(async () => {
+        try {
+            let allOrders = await axios({
+                method: 'get',
+                url: '/api/orders/orders-by-user'
+            })
+
+            if(allOrders.data.length > 0) {
+                setState({
+                    ...state,
+                    orders: allOrders.data
+                })
+            }
+        } catch(e) {
+            setState({
+                ...state,
+                popup: true,
+                popupInfo: {
+                    vertical: 'top',
+                    horizontal: 'center',
+                    color: 'error',
+                    message: 'Something went wrong while fetching orders..'
+                }
+            })
+        }
+    }, [])
 
     return (
         <>
             <Header />
+            <AlertMessage state={state} setState={setState} />
             <div className={classes.root}>
                 <Table className={classes.table} aria-label="simple table">
                     <TableHead>
@@ -80,15 +130,20 @@ export default function BasicTable() {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {rows.map((row) => (
+                        {state.orders.map((row) => (
                             <TableRow key={row.name} className={classes.tableRow}>
                                 <TableCell component="th" scope="row">
-                                    {row.name}
+                                    {row.fullName}
                                 </TableCell>
-                                <TableCell align="right" className={classes.tableData}>{row.orderDate}</TableCell>
-                                <TableCell align="right" className={classes.tableData}>{row.orderTotal}</TableCell>
+                                {console.log(row)}
+                                <TableCell align="right" className={classes.tableData}>{row.orderPlaced.slice(0, 10)}</TableCell>
+                                <TableCell align="right" className={classes.tableData} style={{color: 'white'}}>{row.orderTotal}</TableCell>
                                 <TableCell align="right" className={classes.tableData}>{row.address}</TableCell>
-                                <TableCell align="right" className={classes.tableData}>{row.isCompleted}</TableCell>
+                                {row.isOrderCompleted ? 
+                                    <TableCell align="right" className={classes.tableData} style={{color: 'green'}}>Completed</TableCell> :
+                                    <TableCell align="right" className={classes.tableData} style={{color: 'yellow'}}>In process</TableCell>
+                                }
+                                
                             </TableRow>
                         ))}
                     </TableBody>
