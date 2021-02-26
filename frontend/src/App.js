@@ -32,6 +32,10 @@ function App() {
             <Route path="/change-password" component={ChangePassword} />
             <Route path="/shopping-cart" component={ShoppingCart} />
             <Route path="/place-order" component={PlaceOrder} />
+            <Route path="/ordersHistory" component={OrdersHistory} />
+            <Route path="/ordersHistory/success" >
+              <OrdersHistory success />
+            </Route>
           </>
         ) : <>
               <Route path="/login" component={Login} />
@@ -56,7 +60,6 @@ function App() {
       <Route path="/forgot-password" component={ForgotPassword} />
       <Route path="/reset-password/:token" component={ResetPassword} />
       <Route path="/category/:id" component={ProductCategories} />
-      <Route path="/ordersHistory" component={OrdersHistory} />
       {logged}
       {isAdmin}
     </>

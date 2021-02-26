@@ -180,7 +180,7 @@ const PlaceOrder = (props) => {
                 })
 
                 // Redirect
-                props.history.push('/success')
+                props.history.push('/ordersHistory/success')
             }
         } catch(e) {
             setState({
