@@ -125,15 +125,15 @@ const Home = (props) => {
             <div className={classes.body}>
                 <Carousel className={classes.slider} animation="slide" interval={6000} timeout={1000}>
                     {state.items.map( (item, i) => (
-                        <Link to={"/category/" + item._id}>
+                        <Link key={i + 'aa'} to={"/category/" + item._id}>
                             <ItemCarousel key={i} name={item.name} src={host + item.imageUrl} />
                         </Link>
                     ) )}
                 </Carousel>
                 <Typography className={classes.popular}>Popular products:</Typography>
                 <div className={classes.popularContainer}>
-                    {state.popularProducts.map((item) => (
-                        <Card productId={item._id} image={host + item.imageUrl} alt={item.name} name={item.name} description={item.detail} />
+                    {state.popularProducts.map((item, i) => (
+                        <Card key={i} productId={item._id} image={host + item.imageUrl} alt={item.name} name={item.name} description={item.detail} />
                     ))}
                 </div>
             </div>

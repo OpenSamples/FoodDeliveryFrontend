@@ -152,6 +152,7 @@ const Header = (props) => {
                 >
                     {isAdmin ? <Link to="/admin-dashboard" className={classes.editProfile}><MenuItem onClick={handleClose}>Admin dashboard</MenuItem></Link> : ''}
                     <Link to="/edit-profile" className={classes.editProfile}><MenuItem onClick={handleClose}>My account</MenuItem></Link>
+                    <Link to="/ordersHistory" className={classes.editProfile}><MenuItem onClick={handleClose}>Orders History</MenuItem></Link>
                     <MenuItem onClick={logout}>Logout</MenuItem>
                 </Menu>
             </>
@@ -182,9 +183,9 @@ const Header = (props) => {
                 <div>
                     {/* rute */}
                     <div className={classes.navigation}>
-                        {navItems.map(item => {
+                        {navItems.map((item, i) => {
                             return (
-                                <Link className={classes.navItems} to={item.path}>{item.name}</Link>
+                                <Link key={item + ' ' + i} className={classes.navItems} to={item.path}>{item.name}</Link>
                             )
                         })}
                     </div>

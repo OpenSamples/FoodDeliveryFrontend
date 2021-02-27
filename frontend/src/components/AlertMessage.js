@@ -13,11 +13,10 @@ const AlertMessage = (props) => {
         })
     }
 
-
     return (
         <>
             <Snackbar anchorOrigin={{vertical: props.state.popupInfo.vertical || 'top', horizontal: props.state.popupInfo.horizontal || 'center'}} open={props.state.popup} autoHideDuration={6000} onClose={handleClose}>
-                <Alert onClose={handleClose} severity={props.state.popupInfo.color || ''}>
+                <Alert onClose={handleClose} severity={props.state.popupInfo.color || 'error'}>
                     {props.state.popupInfo.message || ''}
                 </Alert>
             </Snackbar>

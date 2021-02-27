@@ -8,10 +8,12 @@ import Items from '../components/ItemCarousel'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import Comment from '../components/Comment'
-import photo1 from '../assets/categories/1.jpg'
+import AddIcon from '@material-ui/icons/Add';
 import axios from 'axios'
+import ReviewProduct from '../components/ReviewProduct';
 import { host } from '../config/config'
 import AlertMessage from '../components/AlertMessage'
+import { useSelector } from 'react-redux'
 
 const useStyles = makeStyles(() => ({
     productInfo: {
@@ -21,7 +23,9 @@ const useStyles = makeStyles(() => ({
     container: {
         minHeight: '100vh',
         width: '70%',
-        margin: '5rem auto'
+        margin: '5rem auto',
+        display: 'flex',
+        flexDirection: 'column'
     },
     imgContainer: {
         width: '40%',
@@ -71,21 +75,12 @@ const useStyles = makeStyles(() => ({
     },
     productPrice: {
         color: '#388e3c'
+    },
+    addReview: {
+        marginBottom: '20px',
+        float: 'right'
     }
 }))
-
-let comments = [
-    {
-        image: photo1,
-        name: 'Ime',
-        comment: 'Neki comment'
-    },
-    {
-        image: photo1,
-        name: 'Ime2',
-        comment: 'Neki comment2'
-    }
-]
 
 const SingleProduct = (props) => {
     const classes = useStyles()
@@ -93,6 +88,12 @@ const SingleProduct = (props) => {
     const [state, setState] = React.useState({
         id: props.match.params.id,
         product: {},
+        ratingStar: 5,
+        messageReview: '',
+        dialogOpen: false,
+        comments: [],
+        averageReview: -1,
+        loadingMessage: 'Loading...',
         qty: 1,
         btn_disabled: false,
         popup: false,
@@ -101,6 +102,43 @@ const SingleProduct = (props) => {
         }
     })
 
+    const getAllCommentsReviews = async (id) => {
+        try {
+            // Get reviews
+            let averageReview = await axios({
+                method: 'get',
+                url: '/api/products/average-rating/' + id
+            })
+
+
+            // Get comments
+            let allComments = await axios({
+                method: 'get',
+                url: '/api/products/comments/' + id
+            })
+
+            return {
+                averageReview,
+                allComments
+            }
+        } catch(e) {
+            setState({
+                ...state,
+                popup: true,
+                popupInfo: {
+                    vertical: 'top',
+                    horizontal: 'center',
+                    color: 'error',
+                    message: 'Something went wrong while fetching reviews and comments...'
+                }
+            })
+            return {
+                averageReview: -1,
+                allComments: []
+            }
+        }
+    }
+
     React.useEffect(async () => {
         try {
             let response = await axios({
@@ -108,17 +146,31 @@ const SingleProduct = (props) => {
                 url: '/api/products/' + state.id
             })
     
-            if(response.data[0]._id) {
+            if(response.data[0] && response.data[0]._id) {
                 let productData = response.data[0]
-    
+
+                let {averageReview, allComments} = await getAllCommentsReviews(state.id)
+
                 setState({
                     ...state,
-                    product: productData
+                    product: productData,
+                    loadingMessage: '',
+                    comments: allComments.data.map(item => ({rating: item.rating, ...item.comment})),
+                    averageReview: typeof averageReview.data === 'number' ? averageReview.data : -1
+                })
+
+
+            } else if(!response.data.length) {
+                // No product
+                setState({
+                    ...state,
+                    loadingMessage: 'Product not found'
                 })
             } else {
                 setState({
                     ...state,
                     popup: true,
+                    loadingMessage: '',
                     popupInfo: {
                         vertical: 'top',
                         horizontal: 'center',
@@ -128,10 +180,11 @@ const SingleProduct = (props) => {
                 })
             }
         } catch(e) {
-            
+
             setState({
                 ...state,
                 popup: true,
+                loadingMessage: '',
                 popupInfo: {
                     vertical: 'top',
                     horizontal: 'center',
@@ -195,19 +248,20 @@ const SingleProduct = (props) => {
         }
     }
 
-
     if(state.product && Object.keys(state.product).length > 0 ) {
         body = () => (
             <>
+                <ReviewProduct getAllCommentsReviews={getAllCommentsReviews} state={state} setState={setState} />
                 <div className={classes.productInfo}>
                     <Carousel className={classes.imgContainer} autoPlay={false}>
                         <Items key="1" singlePage name={state.product.name} src={host + state.product.imageUrl} />
-                        <Items key="2" singlePage name={state.product.name} src={host + state.product.imageUrl} />
                     </Carousel>
                     <div className={classes.productDetails}>
                         <div className={classes.rating}>
                             <h2>{state.product.name} <span className={classes.productPrice}>{state.product.price ? ' - $' + state.product.price : ''}</span></h2>
-                            <Rating className={classes.ratingStar} name="ratings" precision={0.1} value={4} readOnly />
+                            {state.averageReview === -1 ? '' :
+                                <Rating className={classes.ratingStar} name="ratings" precision={0.1} value={state.averageReview} readOnly />
+                            }
                         </div>
                         <p>{state.product.detail}</p>
                         <div className={classes.addToCart}>
@@ -227,17 +281,21 @@ const SingleProduct = (props) => {
                     </div>
                 </div>
                 <div className={classes.commentSection}>
-                    <h3>Comments:</h3>
-                    {comments.map((comment) => (
-                        <Comment image={comment.image} name={comment.name} comment={comment.comment} />
+                
+                    {state.comments.length ? <h3>Comments:</h3> : ''}
+                    {state.comments.map((comment, i) => (
+                        <Comment key={i} rating={comment.rating} image={comment.imageUrl} name={comment.name} comment={comment.comment} />
                     ))}
                 </div>
             </>
         )
-    } else {
-        body = () => (
-            <p>Product not found</p>
-        )
+    } 
+
+    const showReviewDialog = () => {
+        setState({
+            ...state,
+            dialogOpen: true
+        })
     }
 
     return (
@@ -245,7 +303,18 @@ const SingleProduct = (props) => {
             <Header />
             <AlertMessage state={state} setState={setState} />
             <div className={classes.container}>
-                {body()}
+                <span style={{margin: '0 auto'}}>
+                    {state.loadingMessage}
+                </span>
+                <div>
+                    {useSelector(state => state.user)._id ? 
+                        <Button onClick={showReviewDialog} startIcon={<AddIcon />} className={classes.addReview} color="primary" variant="outlined">Add review</Button>
+                    : ''}
+                </div>
+
+                <div>
+                    {body()}
+                </div>
             </div>
             <Footer />
         </>

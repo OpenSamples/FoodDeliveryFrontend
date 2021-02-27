@@ -161,7 +161,7 @@ const Filters = (props) => {
                             }}
                         >
                             <option aria-label="None" value="" />
-                            {state.categories.map(category => <option value={category._id}>{category.name}</option>)}
+                            {state.categories.map((category, i) => <option key={i} value={category._id}>{category.name}</option>)}
                         </Select>
                     </FormControl>
                 }

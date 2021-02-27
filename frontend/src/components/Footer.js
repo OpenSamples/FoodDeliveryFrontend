@@ -34,8 +34,8 @@ const Footer = () => {
     return (
         <div className={classes.footer}>
             <div>
-                {icons.map(icon => (
-                    <IconButton color="inherit">
+                {icons.map((icon, i) => (
+                    <IconButton key={icon + ' ' + i} color="inherit">
                         {icon.icon}
                     </IconButton>
                 ))}

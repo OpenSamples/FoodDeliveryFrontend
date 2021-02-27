@@ -48,7 +48,7 @@ const ShoppingCartItem = props => {
     const classes = useStyles()
 
     const [state, setState] = React.useState({
-        popup: true,
+        popup: false,
         popupInfo: {
 
         }
