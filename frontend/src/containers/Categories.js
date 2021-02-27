@@ -8,8 +8,9 @@ import Header from '../components/Header'
 import Footer from '../components/Footer'
 import Card from '../components/Card'
 import Filters from '../components/Filters'
-import { products as productAction } from '../store/actions/'
+import { products as productAction, productCategoriesAction } from '../store/actions/'
 import AlertMessage from '../components/AlertMessage'
+
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -37,56 +38,12 @@ const useStyles = makeStyles((theme) => ({
     } 
 }))
 
-
-const Menu = () => {
+const Categories = (props) => {
     const classes = useStyles()
 
     const dispatch = useDispatch()
 
-    useEffect(async () => {
-        try {
-            let { data } = await axios({
-                method: 'get',
-                url: '/api/products'
-            })
-    
-            dispatch({
-                type: productAction,
-                products: data
-            })
-
-            setProducts(data)
-
-            let msgForState = ''
-            
-            if(!data.length) {
-                msgForState = 'No product found!'
-            }
-
-            setState({
-                ...state,
-                chunkProducts: getChunk(data, 10),
-                msg: msgForState
-            })
-
-        } catch(e) {
-            setState({
-                ...state,
-                msg: 'Something went wrong...',
-                popup: true,
-                popupInfo: {
-                    vertical: 'top',
-                    horizontal: 'center',
-                    color: 'error',
-                    message: 'Something went wrong...'
-                }
-            })
-
-        }
-    }, [])   
-
-
-    const [products, setProducts] = React.useState(useSelector(state => state.products))
+    const [products, setProducts] = React.useState(useSelector(state => state.productsPerCategory))
 
     const getChunk = (array, perChunk) => {
         if(!array.length) {
@@ -111,11 +68,53 @@ const Menu = () => {
         productsPage: 0,
         message: '',
         msg: 'Loading...',
+        id: props.match.params.id,
         popup: false,
         popupInfo: {
-
+            
         }
     })
+
+
+    useEffect(async () => {
+        try {
+            let { data } = await axios({
+                method: 'get',
+                url: '/api/products/products-by-category/' + state.id
+            })
+    
+            dispatch({
+                type: productCategoriesAction,
+                products: data
+            })
+
+            setProducts(data)
+
+            let msgForState = ''
+            
+            if(!data.length) {
+                msgForState = 'No product found!'
+            }
+
+            setState({
+                ...state,
+                chunkProducts: getChunk(data, 10),
+                msg: msgForState
+            })
+        } catch(e) {
+            setState({
+                ...state,
+                msg: 'Something went wrong...',
+                popup: true,
+                popupInfo: {
+                    vertical: 'top',
+                    horizontal: 'center',
+                    color: 'error',
+                    message: 'Something went wrong...'
+                }
+            })
+        }
+    }, [])       
 
     const changePage = (event, value) => {
         setState({
@@ -124,13 +123,12 @@ const Menu = () => {
         })
     }
 
-
     return (
         <>
             <Header />
             <AlertMessage state={state} setState={setState} />
             <div className={classes.container}>
-                <Filters state={state} setState={setState} getChunk={getChunk} products={products} />
+                <Filters disableSelect state={state} setState={setState} getChunk={getChunk} products={products} />
                 <div className={classes.productContainer}>
                     {state.chunkProducts[state.productsPage].map((product, i) => {
                         return (
@@ -147,4 +145,4 @@ const Menu = () => {
 }
 
 
-export default Menu
+export default Categories

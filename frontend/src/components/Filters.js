@@ -2,6 +2,8 @@ import React from 'react'
 import { fade, makeStyles } from '@material-ui/core/styles'
 import { Button, Select, FormControl, InputLabel, InputBase } from '@material-ui/core'
 import SearchIcon from '@material-ui/icons/Search'
+import axios from 'axios'
+import AlertMessage from './AlertMessage'
 
 const useStyles = makeStyles((theme) => ({
     filters: {
@@ -61,7 +63,12 @@ const Filters = (props) => {
     const [state, setState] = React.useState({
         category: '',
         searchText: '',
-        message: ''
+        message: '',
+        categories: [],
+        popup: false,
+        popupInfo: {
+            
+        }
     })
 
     const filterProducts = () => {
@@ -69,12 +76,12 @@ const Filters = (props) => {
         // Perform filter
 
         let filteredProducts = props.products.filter((product) => {
-            if((state.category === '' || product.category === state.category) && 
-                (product.name.toLowerCase().includes(state.searchText.toLowerCase()) || 
-                    product.description.toLowerCase().includes(state.searchText.toLowerCase()))) {
-
-                return product
-            }
+                if((state.category === '' || product.categoryId === state.category) && 
+                    (state.searchText === '' || product.name.toLowerCase().includes(state.searchText.toLowerCase()) || 
+                        product.detail.toLowerCase().includes(state.searchText.toLowerCase()))) {
+    
+                    return product
+                }
         })
 
 
@@ -94,6 +101,33 @@ const Filters = (props) => {
         })
     }
 
+    React.useEffect(async () => {
+        try {
+            let categoriesAll = await axios({
+                method: 'get',
+                url: '/api/categories'
+            })
+
+            if(categoriesAll.data.length > 0) {
+                setState({
+                    ...state,
+                    categories: categoriesAll.data
+                })
+            }
+        } catch(e) {
+            setState({
+                ...state,
+                popup: true,
+                popupInfo: {
+                    vertical: 'top',
+                    horizontal: 'center',
+                    color: 'error',
+                    message: 'Failed to fetch categories'
+                }
+            })
+        }
+    }, [])
+
     const handleChangeCategory = (event) => {
         setState({
           ...state,
@@ -110,26 +144,28 @@ const Filters = (props) => {
 
     return (
         <>
+            <AlertMessage state={state} setState={setState} />
             <div className={classes.filters}>
-                <FormControl className={classes.formControl}>
-                    <InputLabel htmlFor="categories">Category</InputLabel>
-                    <Select
-                        native
-                        value={state.category}
-                        onChange={handleChangeCategory}
-                        inputProps={{
-                            name: 'category',
-                            id: 'categories',
-                        }}
-                    >
-                        <option aria-label="None" value="" />
-                        <option value='Category 1'>Category 1</option>
-                        <option value='Category 2'>Category 2</option>
-                        <option value='Category 3'>Category 3</option>
-                        <option value='Category 4'>Category 4</option>
-                        <option value='Category 5'>Category 5</option>
-                    </Select>
-                </FormControl>
+                {
+                    props.disableSelect ? 
+                     '' :
+                     <FormControl className={classes.formControl}>
+                        <InputLabel htmlFor="categories">Category</InputLabel>
+                        <Select
+                            native
+                            value={state.category}
+                            onChange={handleChangeCategory}
+                            inputProps={{
+                                name: 'category',
+                                id: 'categories',
+                            }}
+                        >
+                            <option aria-label="None" value="" />
+                            {state.categories.map(category => <option value={category._id}>{category.name}</option>)}
+                        </Select>
+                    </FormControl>
+                }
+                
                 <div className={classes.search}>
                     <div className={classes.searchIcon}>
                         <SearchIcon />

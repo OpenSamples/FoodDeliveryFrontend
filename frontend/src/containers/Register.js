@@ -1,9 +1,13 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Link } from "react-router-dom";
+import axios from 'axios'
+import { login } from '../store/actions'
+import { useDispatch } from 'react-redux'
 import { TextField, Button, Typography, IconButton } from "@material-ui/core";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import logo from "../assets/logo.png";
+import AlertMessage from '../components/AlertMessage'
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -20,7 +24,7 @@ const useStyles = makeStyles(() => ({
     padding: "50px",
     height: "50%",
     paddingTop: "0",
-    width: "35%",
+    width: "340px",
   },
   input: {
     margin: "15px 0",
@@ -56,10 +60,90 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const Register = () => {
+const Register = (props) => {
   const classes = useStyles();
+
+  const dispatch = useDispatch()
+
+  const [user, setUser] = React.useState({
+    email: '',
+    fullName: '',
+    password: ''
+
+  })
+
+  const updateUser = (event) => {
+    setUser({
+      ...user,
+      [event.target.name]: event.target.value
+    })
+  }
+ 
+  const [state, setState] = React.useState({
+    popup: false,
+    popupInfo: {
+
+    }
+  })
+
+  const registerUser = async (event) => {
+    event.preventDefault()
+
+    try {
+      let data = await axios({
+        method: 'post',
+        url: '/api/users/',
+        data: {
+          email: user.email,
+          password: user.password,
+          firstName: user.fullName.split(' ')[0],
+          lastName: user.fullName.split(' ')[1]
+        }
+      })
+
+      
+      if(data.data.message === "Successfully!") {
+        dispatch({
+          type: login,
+          user: data.data.user
+        })
+        
+
+        // Redirect
+        props.history.push('/success')
+      } else {
+        setState({
+          ...state,
+          popup: true,
+          popupInfo: {
+              horizontal: 'center',
+              vertical: 'top',
+              color: 'error',
+              message: 'Something went wrong!'
+          }
+        })
+      }
+
+      
+      // alert('registered!')
+    } catch(e) {
+      setState({
+        ...state,
+        popup: true,
+        popupInfo: {
+            horizontal: 'center',
+            vertical: 'top',
+            color: 'error',
+            message: 'Something went wrong!'
+        }
+      })
+    }
+  }
+
+
   return (
     <>
+      <AlertMessage state={state} setState={setState} />
       <Link to="/" className={classes.homepage}>
         <IconButton>
           <ArrowBackIcon />
@@ -67,9 +151,10 @@ const Register = () => {
         Back to homepage
       </Link>
       <div className={classes.root}>
-        <form className={classes.container}>
+        <form className={classes.container} onSubmit={registerUser}>
           <img src={logo} alt="logo" className={classes.logo} />
           <TextField
+            onChange={updateUser}
             required
             name="email"
             className={classes.input}
@@ -77,13 +162,15 @@ const Register = () => {
             type="email"
           />
           <TextField
+            onChange={updateUser}
             required
-            name="full-name"
+            name="fullName"
             className={classes.input}
             label="Full Name"
             type="text"
           />
           <TextField
+            onChange={updateUser}
             required
             name="password"
             className={classes.input}

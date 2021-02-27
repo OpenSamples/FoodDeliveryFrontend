@@ -7,6 +7,8 @@ import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import PersonIcon from '@material-ui/icons/Person';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import logo from '../assets/logo.png';
+import { useDispatch, useSelector } from 'react-redux'
+import { logout as logoutAction } from '../store/actions'
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -44,6 +46,14 @@ const useStyles = makeStyles(() => ({
     buttonCont: {
         margin: '0 5px',
         border: '1px solid #fff !important'
+    },
+    editProfile: {
+        textDecoration: 'none',
+        color: '#000',
+        '&:hover': {
+            textDecoration: 'none',
+            color: '#000'
+        }
     }
 }))
 
@@ -73,6 +83,11 @@ const Header = (props) => {
         anchorEl: null
     })
 
+    const dispatch = useDispatch()
+
+    const logged = useSelector(state => !!state.user._id)
+    const isAdmin = useSelector(state => state.user.role)
+
     const open = Boolean(state.anchorEl);
 
     const handleMenu = (event) => {
@@ -90,11 +105,16 @@ const Header = (props) => {
     };
 
     const logout = () => {
-        setState({
-            ...state,
-            logged: false,
-            anchorEl: null
+        // setState({
+        //     ...state,
+        //     logged: false,
+        //     anchorEl: null
+        // })
+
+        dispatch({
+            type: logoutAction
         })
+
     }
 
     const loggedIn = () => {
@@ -103,7 +123,9 @@ const Header = (props) => {
                 <IconButton
                     color="inherit"
                 >
-                    <ShoppingCartIcon />
+                    <Link className={classes.colorWhite} to="/shopping-cart">
+                        <ShoppingCartIcon />
+                    </Link>
                 </IconButton>
                 <IconButton
                     aria-controls="menu-appbar"
@@ -128,8 +150,8 @@ const Header = (props) => {
                     open={open}
                     onClose={handleClose}
                 >
-                    <MenuItem onClick={handleClose}>Profile</MenuItem>
-                    <MenuItem onClick={handleClose}>My account</MenuItem>
+                    {isAdmin ? <Link to="/admin-dashboard" className={classes.editProfile}><MenuItem onClick={handleClose}>Admin dashboard</MenuItem></Link> : ''}
+                    <Link to="/edit-profile" className={classes.editProfile}><MenuItem onClick={handleClose}>My account</MenuItem></Link>
                     <MenuItem onClick={logout}>Logout</MenuItem>
                 </Menu>
             </>
@@ -139,16 +161,16 @@ const Header = (props) => {
     const loggedOut = () => {
         return (
             <>
-                <Button className={classes.buttonCont} startIcon={<PersonIcon className={classes.colorWhite} />}>
-                    <Link to="/login" className={classes.button}>
-                        Login
-                    </Link>
-                </Button>
-                <Button className={classes.buttonCont} startIcon={<PersonAddIcon className={classes.colorWhite} />}>
-                    <Link to="/register" className={classes.button}>
-                        Signup
-                    </Link>
-                </Button>
+                <Link to="/login" className={classes.button}>
+                    <Button className={`${classes.buttonCont} ${classes.colorWhite}`} startIcon={<PersonIcon className={classes.colorWhite} />}>
+                            Login
+                    </Button>
+                </Link>
+                <Link to="/register" className={classes.button}>
+                    <Button className={`${classes.buttonCont} ${classes.colorWhite}`} startIcon={<PersonAddIcon className={classes.colorWhite} />}>
+                            Signup
+                    </Button>
+                </Link>
             </>
         )
     }
@@ -166,7 +188,7 @@ const Header = (props) => {
                             )
                         })}
                     </div>
-                    {state.logged ? loggedIn() : loggedOut()}
+                    {logged ? loggedIn() : loggedOut()}
                 </div>
             </Toolbar>
         </AppBar>

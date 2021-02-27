@@ -1,68 +1,77 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
-import { Link } from 'react-router-dom'
 import { Card, CardActionArea, CardActions, CardContent, CardMedia} from '@material-ui/core'
+import { Delete } from '@material-ui/icons'
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import axios from 'axios'
+import { host } from '../config/config'
 import AlertMessage from './AlertMessage'
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((props) => ({
     root: {
-      maxWidth: 300,
-      width: 280
+        maxWidth: 300,
+        width: 280,
+        margin: '20px',
+        overflow: 'visible',
+        alignSelf: 'center'
     },
     media: {
-      height: 140,
+        height: 120,
     },
     actions: {
         justifyContent: 'space-between'
+    },
+    qty: {
+        color: 'rgba(0, 0, 0, 0.64)',
+        marginRight: '10px'
     }
-});
+}))
 
-const CardComponent = (props) => {
+const CardOrder = (props) => {
     const classes = useStyles()
-
+    
     const [state, setState] = React.useState({
         popup: false,
         popupInfo: {
 
         }
     })
-
-    const addToCartFinish = async () => {
+    
+    const deleteFromCart = async () => {
         try {
-            let productCart = await axios({
+            let deletedProduct = await axios({
                 method: 'post',
-                url: '/api/shopping-cart-items/' + props.productId,
+                url: '/api/shopping-cart-items/cart/remove-product',
                 data: {
-                    qty: 1
+                    productId: props.productId
                 }
             })
     
-            if(productCart.data.msg.startsWith('Product added to cart that belongs to user:')) {
-                // Product is successfully added to cart
-                setState({
-                    ...state,
+    
+            if(deletedProduct.data.msg === 'Product removed from Shopping Cart') {
+                props.setState({
+                    ...props.state,
+                    items: props.state.items.filter(item => props.productId !== item.productId),
                     popup: true,
                     popupInfo: {
                         vertical: 'top',
                         horizontal: 'center',
                         color: 'success',
-                        message: 'Product added to cart!'
+                        message: 'Product removed from cart'
                     }
                 })
             }
+
         } catch(e) {
-            setState({
-                ...state,
+            props.setState({
+                ...props.state,
                 popup: true,
                 popupInfo: {
                     vertical: 'top',
                     horizontal: 'center',
                     color: 'error',
-                    message: 'Failed to add product to cart!'
+                    message: 'Failed to remove product from cart'
                 }
             })
         }
@@ -75,32 +84,27 @@ const CardComponent = (props) => {
                 <CardActionArea>
                     <CardMedia
                         className={classes.media}
-                        image={props.image}
-                        title={props.alt}
+                        image={host + props.thumbnail}
+                        title={props.name}
                     />
                     <CardContent>
                         <Typography gutterBottom variant="h5" component="h2">
                             {props.name}
                         </Typography>
                         <Typography variant="body2" color="textSecondary" component="p">
-                            {props.description}
+                            {props.details}
                         </Typography>
                     </CardContent>
                 </CardActionArea>
                 <CardActions className={classes.actions}>
-                    <Link to={'/product/' + props.productId}>
-                        <Button size="small" color="primary">
-                            View
-                        </Button>
-                    </Link>
-                    <Button onClick={addToCartFinish} startIcon={<ShoppingCartIcon />} size="small" color="primary">
-                        Add to cart
+                    <Button onClick={deleteFromCart} startIcon={<Delete />} size="small" color="secondary">
+                        Delete
                     </Button>
+                    <span className={classes.qty}>Quantity: {props.qty}</span>
                 </CardActions>
             </Card>
         </>
-        
     )
 }
 
-export default CardComponent
+export default CardOrder

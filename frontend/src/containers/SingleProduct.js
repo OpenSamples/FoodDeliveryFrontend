@@ -9,6 +9,9 @@ import Header from '../components/Header'
 import Footer from '../components/Footer'
 import Comment from '../components/Comment'
 import photo1 from '../assets/categories/1.jpg'
+import axios from 'axios'
+import { host } from '../config/config'
+import AlertMessage from '../components/AlertMessage'
 
 const useStyles = makeStyles(() => ({
     productInfo: {
@@ -71,39 +74,6 @@ const useStyles = makeStyles(() => ({
     }
 }))
 
-let product = [
-    {
-        id: '2',
-        image: photo1,
-        alt: 'Photo 2',
-        name: 'Product 2',
-        description: `'Our slow-steeped custom blend of Starbucks® Cold Brew coffee accented with vanilla and topped with a delicate float of house-made vanilla sweet cream that cascades throughout the cup. It's over-the-top and super-smooth.90 Cal.Menu limited. Restricted delivery area. Fees subject to change. Prices for Starbucks items purchased through UberEats may be higher than posted in stores or as marked. We cannot guarantee that any unpackaged products served in our stores are allergen-free because we use shared equipment to store, prepare, and serve them. Please visit the Starbucks website for nutritional and allergen information. Pike Place® is a registered trademark of the Pike Place Market PDA, used under license. CA prices of taxable food and beverage include sales tax. Product image may vary from delivered product.'`,
-        category: 'Category 2',
-        ratings: 3,
-        price: 12
-    },
-    {
-        id: '1',
-        image: photo1,
-        alt: 'Photo 1',
-        name: 'Product 1',
-        description: `'Our slow-steeped custom blend of Starbucks® Cold Brew coffee accented with vanilla and topped with a delicate float of house-made vanilla sweet cream that cascades throughout the cup. It's over-the-top and super-smooth.90 Cal.Menu limited. Restricted delivery area. Fees subject to change. Prices for Starbucks items purchased through UberEats may be higher than posted in stores or as marked. We cannot guarantee that any unpackaged products served in our stores are allergen-free because we use shared equipment to store, prepare, and serve them. Please visit the Starbucks website for nutritional and allergen information. Pike Place® is a registered trademark of the Pike Place Market PDA, used under license. CA prices of taxable food and beverage include sales tax. Product image may vary from delivered product.'`,
-        category: 'Category 2',
-        ratings: 3,
-        price: 3000
-    },
-    {
-        id: '3',
-        image: photo1,
-        alt: 'Photo 3',
-        name: 'Product 3',
-        description: `'Our slow-steeped custom blend of Starbucks® Cold Brew coffee accented with vanilla and topped with a delicate float of house-made vanilla sweet cream that cascades throughout the cup. It's over-the-top and super-smooth.90 Cal.Menu limited. Restricted delivery area. Fees subject to change. Prices for Starbucks items purchased through UberEats may be higher than posted in stores or as marked. We cannot guarantee that any unpackaged products served in our stores are allergen-free because we use shared equipment to store, prepare, and serve them. Please visit the Starbucks website for nutritional and allergen information. Pike Place® is a registered trademark of the Pike Place Market PDA, used under license. CA prices of taxable food and beverage include sales tax. Product image may vary from delivered product.'`,
-        category: 'Category 2',
-        ratings: 3,
-        price: 3000
-    }
-]
-
 let comments = [
     {
         image: photo1,
@@ -122,10 +92,56 @@ const SingleProduct = (props) => {
 
     const [state, setState] = React.useState({
         id: props.match.params.id,
-        product: product.filter(item => item.id === props.match.params.id)[0],
-        qty: 1
+        product: {},
+        qty: 1,
+        btn_disabled: false,
+        popup: false,
+        popupInfo: {
+
+        }
     })
 
+    React.useEffect(async () => {
+        try {
+            let response = await axios({
+                method: 'get',
+                url: '/api/products/' + state.id
+            })
+    
+            if(response.data[0]._id) {
+                let productData = response.data[0]
+    
+                setState({
+                    ...state,
+                    product: productData
+                })
+            } else {
+                setState({
+                    ...state,
+                    popup: true,
+                    popupInfo: {
+                        vertical: 'top',
+                        horizontal: 'center',
+                        color: 'error',
+                        message: 'Something went wrong while fetching product...'
+                    }
+                })
+            }
+        } catch(e) {
+            
+            setState({
+                ...state,
+                popup: true,
+                popupInfo: {
+                    vertical: 'top',
+                    horizontal: 'center',
+                    color: 'error',
+                    message: 'Something went wrong...'
+                }
+            })
+        }
+        
+    }, [])
 
     let body = () => (
         <></>
@@ -140,21 +156,60 @@ const SingleProduct = (props) => {
         }
     }
 
+    const addToCartFinish = async () => {
+        try {
+            let response = await axios({
+                method: 'post',
+                url: '/api/shopping-cart-items/' + state.id,
+                data: {
+                    qty: state.qty
+                }
+            })
 
-    if(state.product) {
+            if(response.data.msg.startsWith('Product added to cart that belongs to user:')) {
+                // Product is successfully added to cart
+                setState({
+                    ...state,
+                    btn_disabled: true,
+                    popup: true,
+                    popupInfo: {
+                        vertical: 'top',
+                        horizontal: 'center',
+                        color: 'success',
+                        message: 'Product added to cart!'
+                    }
+                })
+                
+            }
+        } catch(e) {
+            setState({
+                ...state,
+                popup: true,
+                popupInfo: {
+                    vertical: 'top',
+                    horizontal: 'center',
+                    color: 'error',
+                    message: 'Failed to add product to cart!'
+                }
+            })
+        }
+    }
+
+
+    if(state.product && Object.keys(state.product).length > 0 ) {
         body = () => (
             <>
                 <div className={classes.productInfo}>
                     <Carousel className={classes.imgContainer} autoPlay={false}>
-                        <Items key="1" singlePage name={state.product.name} src={state.product.image} />
-                        <Items key="2" singlePage name={state.product.name} src={state.product.image} />
+                        <Items key="1" singlePage name={state.product.name} src={host + state.product.imageUrl} />
+                        <Items key="2" singlePage name={state.product.name} src={host + state.product.imageUrl} />
                     </Carousel>
                     <div className={classes.productDetails}>
                         <div className={classes.rating}>
                             <h2>{state.product.name} <span className={classes.productPrice}>{state.product.price ? ' - $' + state.product.price : ''}</span></h2>
-                            <Rating className={classes.ratingStar} name="ratings" precision={0.1} value={state.product.ratings} readOnly />
+                            <Rating className={classes.ratingStar} name="ratings" precision={0.1} value={4} readOnly />
                         </div>
-                        <p>{state.product.description}</p>
+                        <p>{state.product.detail}</p>
                         <div className={classes.addToCart}>
                             <span>
                                 <IconButton onClick={increaseQty(-1)}>
@@ -166,7 +221,7 @@ const SingleProduct = (props) => {
                                 </IconButton>
                             </span>
                             <span>
-                                <Button startIcon={<ShoppingCart />} variant="contained" color="primary">Add to cart</Button>
+                                <Button onClick={addToCartFinish} disabled={state.btn_disabled} startIcon={<ShoppingCart />} variant="contained" color="primary">Add to cart</Button>
                             </span>
                         </div>
                     </div>
@@ -188,6 +243,7 @@ const SingleProduct = (props) => {
     return (
         <>
             <Header />
+            <AlertMessage state={state} setState={setState} />
             <div className={classes.container}>
                 {body()}
             </div>
