@@ -142,6 +142,7 @@ const PlaceOrder = (props) => {
         <></>
     )
 
+
     if(state.items.length) {
         itemsCards = () => (
             state.items.map((item, i) => (
@@ -183,7 +184,9 @@ const PlaceOrder = (props) => {
                 props.history.push('/ordersHistory/success')
             }
         } catch(e) {
+            console.log(e)
             setState({
+                ...state,
                 popup: true,
                 popupInfo: {
                     vertical: 'top',
