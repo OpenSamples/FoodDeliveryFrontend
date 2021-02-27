@@ -9,6 +9,7 @@ import Footer from '../components/Footer'
 import photo1 from '../assets/categories/3.jpg'
 import axios from 'axios'
 import AlertMessage from '../components/AlertMessage'
+import Alert from '@material-ui/lab/Alert';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -32,6 +33,19 @@ const useStyles = makeStyles((theme) => ({
         flexWrap: 'wrap',
         gap: '2rem',
         justifyContent: 'center'
+    },
+    verifyEmail: {
+        width: '70%',
+        margin: '20px 0',
+        '& .MuiAlert-message': {
+            display: 'flex',
+            justifyContent: 'space-between',
+            width: '90%'
+        },
+        '& span:last-child': {
+            color: 'blue',
+            cursor: 'pointer'
+        }
     }
 }))
 
@@ -141,11 +155,67 @@ const EditProfile = () => {
         }
     }
 
+    const sendVerificationLink = async () => {
+        try {
+            let response = await axios({
+                method: 'post',
+                url: '/api/users/resend_email_verification'
+            })
+
+            if(response.data.message === 'Successfully!') {
+                setState({
+                    ...state,
+                    popup: true,
+                    popupInfo: {
+                        vertical: 'top',
+                        horizontal: 'center',
+                        color: 'success',
+                        message: 'Successfully!'
+                    }
+                })
+            } else {
+                setState({
+                    ...state,
+                    popup: true,
+                    popupInfo: {
+                        vertical: 'top',
+                        horizontal: 'center',
+                        color: 'error',
+                        message: 'Something went wrong...'
+                    }
+                })
+            }
+        } catch(e) {
+            setState({
+                ...state,
+                popup: true,
+                popupInfo: {
+                    vertical: 'top',
+                    horizontal: 'center',
+                    color: 'error',
+                    message: 'Something went wrong...'
+                }
+            })
+        }
+    }
+
     return (
         <>
             <Header />
             <AlertMessage state={state} setState={setState} />
             <div className={classes.root}>
+
+                {
+                    state.user.email_is_verified ? '' :
+
+                    <Alert className={classes.verifyEmail} severity="warning">
+                        <span>
+                            Your email is not verified! Please verify now... 
+                        </span>
+                        <span onClick={sendVerificationLink}>Resend verification link</span>
+                    </Alert>
+                }
+
                 <div className={classes.avatarContainer}>
                     <Avatar alt="Logo" src={photo1} className={classes.avatar} />
                 </div>

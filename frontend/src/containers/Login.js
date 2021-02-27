@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom'
 import logo from '../assets/logo.png'
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import { login } from '../store/actions'
+import { host } from '../config/config'
 import AlertMessage from '../components/AlertMessage'
 
 const useStyles = makeStyles(() => ({
@@ -38,6 +39,7 @@ const useStyles = makeStyles(() => ({
     google: {
         textDecoration: 'none',
         alignSelf: 'center',
+        margin: '0 auto',
         marginBottom: '20px',
         backgroundColor: '#3f51b5',
         color: '#fff',
@@ -55,6 +57,10 @@ const useStyles = makeStyles(() => ({
     homepage: {
         margin: '10px',
         color: 'rgba(0, 0, 0, 0.54)',
+        textDecoration: 'none'
+    },
+    googleHref: {
+        color: 'white',
         textDecoration: 'none'
     }
 }))
@@ -130,22 +136,22 @@ const Login = (props) => {
         })
     }
 
-    const loginGoogle = async () => {
-        try {
-            // let googleLogin = await axios({
-            //     method: 'get',
-            //     url: '/api/users/google'
-            // })
-            let referenceToNewWindow = window.open('http://localhost:3000/api/users/google', 'googleLogin', "width=340px,height=450px,scrollbars=yes,toolbar=no" );
+    // const loginGoogle = async () => {
+    //     try {
+    //         // let googleLogin = await axios({
+    //         //     method: 'get',
+    //         //     url: '/api/users/google'
+    //         // })
+    //         let referenceToNewWindow = window.open('http://localhost:3000/api/users/google', 'googleLogin', "width=340px,height=450px,scrollbars=yes,toolbar=no" );
 
 
-            referenceToNewWindow.onload = () => {
-                console.log('aa')
-            }
-        } catch(e) {
+    //         referenceToNewWindow.onload = () => {
+    //             console.log('aa')
+    //         }
+    //     } catch(e) {
 
-        }
-    }
+    //     }
+    // }
 
     const [state, setState] = React.useState({
         popup: false,
@@ -172,9 +178,13 @@ const Login = (props) => {
                     <Button type="submit" className={classes.button} variant="contained" color="primary">Login</Button>
                     <Typography className={classes.textColor}>Or sign in with...</Typography>
                     <Button className={classes.google}
-                        onClick={loginGoogle}
+                        // onClick={loginGoogle}
                         color="primary" variant="contained"
-                        >Google</Button>
+                    >
+                        <a className={classes.googleHref} href={host + "api/users/google"}>
+                            Google
+                        </a>
+                    </Button>
                     <Typography className={classes.textColor}>Does not have an account? <Link className={classes.a} to="/register">Sign-up now</Link></Typography>
                     <Typography className={classes.textColor}>Forgot password?<Link className={classes.a} to="/forgot-password"> Reset now</Link></Typography>
                 </form>
