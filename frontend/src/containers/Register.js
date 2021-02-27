@@ -7,6 +7,7 @@ import { useDispatch } from 'react-redux'
 import { TextField, Button, Typography, IconButton } from "@material-ui/core";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import logo from "../assets/logo.png";
+import { host } from '../config/config'
 import AlertMessage from '../components/AlertMessage'
 
 const useStyles = makeStyles(() => ({
@@ -195,9 +196,9 @@ const Register = (props) => {
           <Typography className={classes.textColor}>
             Or Sign Up with...
           </Typography>
-          <Link className={classes.google} to="/login-google">
+          <a className={classes.google} href={host + "api/users/google"}>
             Google
-          </Link>
+          </a>
           <Typography className={classes.textColor}>
             Already have an account?{" "}
             <Link className={classes.a} to="/login">

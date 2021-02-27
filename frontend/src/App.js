@@ -19,7 +19,7 @@ import ProductCategories from './containers/Categories'
 import ResetPassword from "./containers/ResetPassword";
 import OrdersHistory from './containers/OrdersHistory'
 import ChangePassword from './containers/ChangePassword'
-
+import LoginGoogle from './containers/LoginGoogle'
 
 function App() {
   axios.defaults.baseURL = 'http://localhost:3000/';
@@ -54,6 +54,7 @@ function App() {
       </Route>
       <Route path="/menu" component={Menu} />
       <Route path="/about" component={About} />
+      <Route path="/login_with_google/:token" component={LoginGoogle} />
       <Route path="/contact" component={Contact} />
       <Route path="/product/:id" component={SingleProduct} />
       <Route path="/two-step-verification/:token" component={TwoStep} />
