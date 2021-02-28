@@ -20,9 +20,15 @@ const reducer = (state = initialState, action) => {
 
     switch(action.type) {
         case 'login':
-            localStorage.setItem('user', JSON.stringify(action.user));
+            localStorage.setItem('user', JSON.stringify({
+                ...action.user,
+                date: new Date().getTime() / 1000
+            }));
             // window.location.href = "/success";
-            return {...state, user: action.user}
+            return {...state, user: {
+                ...action.user,
+                date: new Date().getTime() / 1000
+            }}
         case 'products':
             return {...state, products: action.products}
         case 'productCategories':
@@ -40,6 +46,8 @@ const reducer = (state = initialState, action) => {
             return {...state, user}
         case 'popularProducts':
             return {...state, popularProducts: action.popularProducts}
+        case 'tokenExpired':
+            return {...state, user: {}}
         case 'categories':
             return {...state, categories: action.categories}
         default: 
