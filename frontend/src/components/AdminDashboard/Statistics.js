@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { VictoryPie } from 'victory-pie'
 import axios from 'axios'
+import AlertMessage from '../AlertMessage'
 
 const useStyles = makeStyles(() => ({
   body: {
@@ -23,6 +24,10 @@ const useStyles = makeStyles(() => ({
     },
     '& .VictoryContainer': {
       height: 'calc(100% - 100px) !important'
+    },
+    '& p': {
+      width: '100%',
+      textAlign: 'center'
     }
   }
 }));
@@ -31,9 +36,14 @@ export default function AdminStatistics() {
   const classes = useStyles();
 
   const [state, setState] = React.useState({
+    message: 'Loading...',
     bestSelling: [],
     mostProductsCategory: [],
-    mostProfitableWeekday: []
+    mostProfitableWeekday: [],
+    popup: false,
+    popupInfo: {
+
+    }
   })
 
   React.useEffect( async () => {
@@ -46,20 +56,45 @@ export default function AdminStatistics() {
       if(statisticsData.data.message && statisticsData.data.message === 'Successfully') {
         setState({
           ...state,
+          message: statisticsData.data.data.mostProfitableWeekday.length && statisticsData.data.data.mostProductsCategory.length && statisticsData.data.data.bestSelling.length ? '' : 'No statistics, please add some products :-)',
           bestSelling: statisticsData.data.data.bestSelling || [],
           mostProductsCategory: statisticsData.data.data.mostProductsCategory || [],
           mostProfitableWeekday: statisticsData.data.data.mostProfitableWeekday || []
         })
       } else {
-
+        setState({
+          ...state,
+          popup: true,
+          message: '',
+          popupInfo: {
+            vertical: 'top',
+            horizontal: 'center',
+            color: 'error',
+            message: 'Something went wrong...'
+          }
+        })
       }
     } catch(e) {
-
+      setState({
+        ...state,
+        popup: true,
+        message: '',
+        popupInfo: {
+          vertical: 'top',
+          horizontal: 'center',
+          color: 'error',
+          message: 'Something went wrong...'
+        }
+      })
     }
   }, [])
 
   return (
     <div className={classes.body}>
+      <AlertMessage state={state} setState={setState} />
+
+      {state.message ? <p>{state.message}</p> : ''}
+
       {[{title: 'Most Profitable Weekday', name: 'mostProfitableWeekday'}, {title: 'Most Products in Category', name: 'mostProductsCategory'}, {title: 'Best Selling Products', name: 'bestSelling'}].map((data, idx) => {
         if(state[data.name].length) {
           return (
@@ -74,6 +109,7 @@ export default function AdminStatistics() {
           )
         }
       })}
+
       {/* <span>
         <h4>Most Profitable Weekday</h4>
         <VictoryPie
