@@ -100,7 +100,8 @@ const Home = (props) => {
         popupInfo: {
 
         },
-        successPage: true
+        successPage: true,
+        tokenExpired: true
     })
 
 
@@ -115,6 +116,20 @@ const Home = (props) => {
                 message: 'Successfully!'
             },
             successPage: false
+        })
+    }
+
+    if(props.tokenExpired && state.tokenExpired) {
+        setState({
+            ...state,
+            popup: true,
+            popupInfo: {
+                vertical: 'top',
+                horizontal: 'center',
+                color: 'warning',
+                message: 'Token expired!'
+            },
+            tokenExpired: false
         })
     }
     
