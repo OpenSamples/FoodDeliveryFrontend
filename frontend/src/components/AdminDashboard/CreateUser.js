@@ -53,12 +53,12 @@ const CreateUser = () => {
         })
     }
 
-    const selectImage = event => {
-        setState({
-            ...state,
-            image: event.target.files[0]
-        })
-    }
+    // const selectImage = event => {
+    //     setState({
+    //         ...state,
+    //         image: event.target.files[0]
+    //     })
+    // }
 
     const createUser = async (event) => {
         event.preventDefault()
@@ -71,7 +71,7 @@ const CreateUser = () => {
                 method: 'post',
                 url: "/api/users", 
                 data: {
-                    upload: state.image,
+                    // upload: state.image,
                     firstName: state.firstName,
                     lastName: state.lastName,
                     email: state.email,
@@ -158,7 +158,7 @@ const CreateUser = () => {
                     label="Password"
                     type="password"
                 />
-                <Button
+                {/* <Button
                     variant="contained"
                     component="label"
                 >
@@ -169,7 +169,7 @@ const CreateUser = () => {
                         onChange={selectImage}
                         hidden
                     />
-                </Button>
+                </Button> */}
                 <Button
                     type="submit"
                     className={classes.button}
