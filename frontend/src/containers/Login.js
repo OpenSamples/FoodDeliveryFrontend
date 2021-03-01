@@ -136,22 +136,6 @@ const Login = (props) => {
         })
     }
 
-    // const loginGoogle = async () => {
-    //     try {
-    //         // let googleLogin = await axios({
-    //         //     method: 'get',
-    //         //     url: '/api/users/google'
-    //         // })
-    //         let referenceToNewWindow = window.open('http://localhost:3000/api/users/google', 'googleLogin', "width=340px,height=450px,scrollbars=yes,toolbar=no" );
-
-
-    //         referenceToNewWindow.onload = () => {
-    //             console.log('aa')
-    //         }
-    //     } catch(e) {
-
-    //     }
-    // }
 
     const [state, setState] = React.useState({
         popup: false,

@@ -24,7 +24,7 @@ import LoginGoogle from './containers/LoginGoogle'
 function App() {
   const dispatch = useDispatch()
 
-  axios.defaults.baseURL = 'http://localhost:3000/';
+  axios.defaults.baseURL = 'http://api-food-delivery.dinno.dev/';
   axios.defaults.headers.common['Authorization'] = `Bearer ${useSelector(state => state.user.token)}`
 
   const [userDate, setUserData] = React.useState(useSelector(state => state.user))
