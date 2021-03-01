@@ -1,1 +1,1 @@
-export const host = 'http://api-food-delivery.dinno.dev/'
+export const host = 'https://api-food-delivery.dinno.dev/'
