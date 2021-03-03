@@ -4,7 +4,7 @@ require('dotenv').config()
 const { json } = require('body-parser')
 const cors = require('cors')
 
-const routes = require('./routes/index')
+// const routes = require('./routes/index')
 
 const app = express()
 
@@ -12,7 +12,7 @@ const app = express()
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(json())
 app.use(cors())
-app.use('/api', routes)
+// app.use('/api', routes)
 
 app.get('/*', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'))

@@ -10,11 +10,11 @@ import AlertMessage from './AlertMessage'
 
 const useStyles = makeStyles({
     root: {
-      maxWidth: 300,
-      width: 280
+        maxWidth: 300,
+        width: 280
     },
     media: {
-      height: 140,
+        height: 140,
     },
     actions: {
         justifyContent: 'space-between'

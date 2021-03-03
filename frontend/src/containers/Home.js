@@ -140,9 +140,9 @@ const Home = (props) => {
             <div className={classes.body}>
                 <Carousel className={classes.slider} animation="slide" interval={6000} timeout={1000}>
                     {state.items.map( (item, i) => (
-                        <Link key={i + 'aa'} to={"/category/" + item._id}>
-                            <ItemCarousel key={i} name={item.name} src={host + item.imageUrl} />
-                        </Link>
+                        // <Link key={i + 'aa'} to={"/category/" + item._id}>
+                            <ItemCarousel to={"/category/" + item._id} key={i} name={item.name} src={host + item.imageUrl} />
+                        // </Link>
                     ) )}
                 </Carousel>
                 <Typography className={classes.popular}>Popular products:</Typography>

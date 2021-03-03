@@ -14,7 +14,10 @@ const useStyles = makeStyles((props) => ({
         width: 280,
         margin: '20px',
         overflow: 'visible',
-        alignSelf: 'center'
+        alignSelf: 'center',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between'
     },
     media: {
         height: 120,
@@ -87,7 +90,7 @@ const CardOrder = (props) => {
                         image={host + props.thumbnail}
                         title={props.name}
                     />
-                    <CardContent>
+                    <CardContent style={{height: '120px', marginBottom: '10px', overflow: 'hidden'}}>
                         <Typography gutterBottom variant="h5" component="h2">
                             {props.name}
                         </Typography>

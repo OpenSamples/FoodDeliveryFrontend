@@ -23,7 +23,8 @@ const useStyles = makeStyles(() => ({
     details: {
         display: 'flex',
         flexDirection: 'column',
-        width: '50%'
+        width: '50%',
+        height: '150px'
     },
     imageQty: {
         display: 'flex',
@@ -33,14 +34,23 @@ const useStyles = makeStyles(() => ({
         width: '50%'
     },
     title: {
-        fontWeight: '500'
+        fontWeight: '500',
+        height: '10%',
+        margin: '3% 0 0'
     },
     price: {
-        color: '#388e3c'
+        color: '#388e3c',
+        height: '10%',
+        margin: '2% 0'
     },
     thumbnail: {
         maxHeight: '100px',
         marginLeft: '20px'
+    },
+    descriptionDetail: {
+        height: '70%',
+        overflowY: 'scroll',
+        direction: 'rtl'
     }
 }))
 
@@ -134,7 +144,7 @@ const ShoppingCartItem = props => {
                 <div className={classes.container}>
                     <div className={classes.details}>
                         <span className={classes.title}>{props.name}</span>
-                        <p>{props.details}</p>
+                        <p className={classes.descriptionDetail}>{props.details}</p>
                         <span className={classes.price}>${props.price} * {props.qty}</span>
                     </div>
                     <div className={classes.imageQty}>

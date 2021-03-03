@@ -1,16 +1,18 @@
 import React from 'react'
 import { Paper, Button } from '@material-ui/core'
+import { Link } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles'
 
 const useStyles = makeStyles(() => ({
     button: {
         width: '100%',
-        height: '300px'
+        // height: '300px'
     },
     photo: {
         width: '100%',
-        height: '300px',
-        backgroundSize: 'cover !important'
+        height: '18.6vw',
+        maxHeight: '330px',
+        backgroundSize: 'auto !important'
     },
     singlePage: {
         width: '100%',
@@ -18,7 +20,8 @@ const useStyles = makeStyles(() => ({
     },
     paper: {
         width: '100%',
-        height: '100%',
+        height: '18.6vw',
+        maxHeight: '330px',
         display: 'flex',
         alignItems: 'center'
     }
@@ -31,9 +34,11 @@ const Item = (props) => {
 
     return (
         <Paper className={classes.paper}>
-            <Button className={classes.button}>
-                <img src={props.src} alt={props.name} className={classNames} />
-            </Button>
+            <Link to={props.to} style={{width: '100%'}}>
+                <Button className={classes.button}>
+                    <img src={props.src} alt={props.name} className={classNames} />
+                </Button>
+            </Link>
         </Paper>
     )
 }

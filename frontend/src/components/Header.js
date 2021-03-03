@@ -120,13 +120,13 @@ const Header = (props) => {
     const loggedIn = () => {
         return (
             <>
-                <IconButton
-                    color="inherit"
-                >
-                    <Link className={classes.colorWhite} to="/shopping-cart">
-                        <ShoppingCartIcon />
-                    </Link>
-                </IconButton>
+                <Link className={classes.colorWhite} to="/shopping-cart">
+                    <IconButton
+                        color="inherit"
+                    >
+                            <ShoppingCartIcon />
+                    </IconButton>
+                </Link>
                 <IconButton
                     aria-controls="menu-appbar"
                     aria-haspopup="true"
