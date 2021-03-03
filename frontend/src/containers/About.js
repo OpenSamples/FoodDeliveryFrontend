@@ -6,6 +6,7 @@ import contactUsEmail from '../assets/email.png'
 import { TextField, Button, Typography } from '@material-ui/core';
 import CardAboutUs from '../components/CardAboutUs'
 import dinno from '../assets/dinno.jpg'
+import nikola from '../assets/nikola.jpg'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -44,7 +45,20 @@ const About = () => {
                     <Typography variant="h6">Short presentation about our Web Application and Team personel introduction.</Typography>
                 </div>
                 <div className={classes.about_us_cards}>
-                    <CardAboutUs init="NJ" fullName="Nikola Jovovic" location="Podgorica,Montenegro" desc="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s" />
+                    <CardAboutUs 
+                        init="NJ"
+                        avatar={nikola}
+                        github="https://github.com/NikolaJovovic98"
+                        instagram="https://www.instagram.com/nikola__jovovic/"
+                        linkedin="https://www.linkedin.com/in/nikola-jovovi%C4%87-0012a81b0/" 
+                        fullName="Nikola Jovovic" 
+                        location="Podgorica, Montenegro" 
+                        desc="A student of Faculty of Science and Mathematics the
+                            course of Computer Science and Information Technologies. 
+                            Experience in backend web development with technologies like Nodejs, 
+                            Express, and database technologies like MongoDB and MySQL. 
+                            Continually studying and d
+                            eveloping new skills to implement in numerous projects." />
                     <CardAboutUs init="IB" fullName="Ivana Bjelobaba" location="Podgorica,Montenegro" desc="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s" />
                     <CardAboutUs
                         avatar={dinno} 
