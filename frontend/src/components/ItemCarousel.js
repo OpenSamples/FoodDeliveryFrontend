@@ -6,13 +6,15 @@ import { makeStyles } from '@material-ui/core/styles'
 const useStyles = makeStyles(() => ({
     button: {
         width: '100%',
-        // height: '300px'
+        height: '18.6vw',
+        maxHeight: '330px',
+        overflow: 'hidden'
     },
     photo: {
         width: '100%',
-        height: '18.6vw',
-        maxHeight: '330px',
-        backgroundSize: 'auto !important'
+        // height: '18.6vw',
+        // maxHeight: '330px',
+        // backgroundSize: 'auto !important'
     },
     singlePage: {
         width: '100%',
