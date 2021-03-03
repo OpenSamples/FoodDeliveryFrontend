@@ -73,21 +73,28 @@ const RecipeReviewCard = (props)=> {
         </CardContent>
       </CardActionArea>
       <CardActions disableSpacing>
-        <a href={props.github || '#'} target="_blank">
-          <IconButton>
-            <GitHubIcon />
-          </IconButton>
-        </a>
-        <a href={props.instagram || '#'} target="_blank">
-          <IconButton>
-            <InstagramIcon />
-          </IconButton>
-        </a>
-        <a href={props.linkedin || '#'} target="_blank">
-          <IconButton>
-            <LinkedInIcon />
-          </IconButton>
-        </a>
+        {props.github ? 
+          <a href={props.github} target="_blank">
+            <IconButton>
+              <GitHubIcon />
+            </IconButton>
+          </a>
+        : ''}
+
+        {props.instagram ? 
+          <a href={props.instagram} target="_blank">
+            <IconButton>
+              <InstagramIcon />
+            </IconButton>
+          </a>
+        : ''}
+        {props.linkedin ? 
+          <a href={props.linkedin} target="_blank">
+            <IconButton>
+              <LinkedInIcon />
+            </IconButton>
+          </a>
+        : ''}
       </CardActions>
     </Card>
   );

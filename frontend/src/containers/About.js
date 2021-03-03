@@ -7,6 +7,7 @@ import { TextField, Button, Typography } from '@material-ui/core';
 import CardAboutUs from '../components/CardAboutUs'
 import dinno from '../assets/dinno.jpg'
 import nikola from '../assets/nikola.jpg'
+import ivana from '../assets/ivana.png'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -59,7 +60,13 @@ const About = () => {
                             Express, and database technologies like MongoDB and MySQL. 
                             Continually studying and d
                             eveloping new skills to implement in numerous projects." />
-                    <CardAboutUs init="IB" fullName="Ivana Bjelobaba" location="Podgorica,Montenegro" desc="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s" />
+                    <CardAboutUs 
+                        init="IB" 
+                        avatar={ivana}
+                        github="https://github.com/ivanab"
+                        fullName="Ivana B." 
+                        location="Remote" 
+                        desc="Full Stack Dev (.NET, MERN)" />
                     <CardAboutUs
                         avatar={dinno} 
                         github="https://github.com/dinno-invis1ble" 
