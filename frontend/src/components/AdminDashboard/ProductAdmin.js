@@ -9,9 +9,11 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
-import { Button, Typography } from "@material-ui/core";
+import { Button, Typography, IconButton } from "@material-ui/core";
 import axios from 'axios'
 import AlertMessage from '../AlertMessage'
+import CheckBoxIcon from '@material-ui/icons/CheckBox';
+import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 
 
 const useStyles = makeStyles(() => ({
@@ -31,6 +33,9 @@ const useStyles = makeStyles(() => ({
     display: 'flex',
     justifyContent: 'space-between',
     marginBottom: '10px'
+  },
+  colorGreen: {
+    color: 'green'
   }
 }));
 
@@ -117,6 +122,59 @@ export default function AdminEditProducts(props) {
     })
   }
 
+  const updatePopular = async (isPopular, id) => {
+    try {
+      let updated = await axios({
+        method: 'post',
+        url: '/api/products/product_popular/' + id,
+        data: {
+          isPopular: !isPopular
+        }
+      })
+
+      if(updated.data._id) {
+        setState({
+          ...state,
+          popup: true,
+          popupInfo: {
+            vertical: 'top',
+            horizontal: 'center',
+            color: 'success',
+            message: 'Successfully'
+          },
+          products: state.products.filter(product => {
+            if(product._id === id) {
+              product.isPopularProduct = !isPopular
+            }
+            return product
+          })
+        })
+      } else {
+        setState({
+          ...state,
+          popup: true,
+          popupInfo: {
+            vertical: 'top',
+            horizontal: 'center',
+            color: 'error',
+            message: 'Something went wrong...'
+          }
+        })
+      }
+    } catch(e) {
+      setState({
+        ...state,
+        popup: true,
+        popupInfo: {
+          vertical: 'top',
+          horizontal: 'center',
+          color: 'error',
+          message: 'Something went wrong...'
+        }
+      })
+    }
+  }
+
   return (
       <div className={classes.body}>
         <AlertMessage state={state} setState={setState} />
@@ -134,6 +192,7 @@ export default function AdminEditProducts(props) {
                 <TableCell>First Name</TableCell>
                 <TableCell align="right">Details</TableCell>
                 <TableCell align="right">Image Path</TableCell>
+                <TableCell align="right">Is popular</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -144,8 +203,16 @@ export default function AdminEditProducts(props) {
                   </TableCell>
                   <TableCell align="right">{row.detail}</TableCell>
                   <TableCell align="right">{row.imageUrl}</TableCell>
+                  <TableCell align="right" className={row.isPopularProduct ? classes.colorGreen : ''}>
+                    <IconButton color="inherit" onClick={ () => updatePopular(row.isPopularProduct, row._id)}>
+                      {row.isPopularProduct ? 
+                        <CheckBoxIcon /> :
+                        <CheckBoxOutlineBlankIcon />
+                      }
+                    </IconButton>
+                  </TableCell>
                   <TableCell align="right">
-                    <Button
+                    {/* <Button
                       onClick={() => deleteProduct(row._id)}
                       className={classes.button}
                       variant="contained"
@@ -153,7 +220,10 @@ export default function AdminEditProducts(props) {
                       startIcon={<DeleteIcon />}
                     >
                       Delete
-                    </Button>
+                    </Button> */}
+                    <IconButton color="secondary" onClick={() => deleteProduct(row._id)}>
+                        <DeleteIcon />
+                    </IconButton>
                   </TableCell>
                   <TableCell align="right">{row.protein}</TableCell>
                 </TableRow>

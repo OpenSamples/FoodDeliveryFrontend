@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import axios from 'axios'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { Route, } from "react-router-dom";
 import Home from "./containers/Home";
 import Login from "./containers/Login";
@@ -19,11 +19,34 @@ import ProductCategories from './containers/Categories'
 import ResetPassword from "./containers/ResetPassword";
 import OrdersHistory from './containers/OrdersHistory'
 import ChangePassword from './containers/ChangePassword'
-
+import LoginGoogle from './containers/LoginGoogle'
 
 function App() {
+  const dispatch = useDispatch()
+
   axios.defaults.baseURL = 'http://localhost:3000/';
   axios.defaults.headers.common['Authorization'] = `Bearer ${useSelector(state => state.user.token)}`
+
+  const [userDate, setUserData] = React.useState(useSelector(state => state.user))
+  const [checkTokenExpired, setTokenCheck] = React.useState(true)
+
+  if(checkTokenExpired && userDate.token) {
+    let userStorageDate = userDate.date
+
+    if(userStorageDate + 28800 < new Date().getTime() / 1000) {
+      // Token expired
+      localStorage.setItem('user', JSON.stringify({}))
+
+      dispatch({
+        type: 'tokenExpired',
+        user: {}
+      })
+
+      window.location.href = "/tokenExpired";
+    }
+
+    setTokenCheck(false)
+  }
 
   const logged = useSelector(state => !!state.user._id) ? 
         (
@@ -52,8 +75,12 @@ function App() {
       <Route path="/success" exact>
         <Home success />
       </Route>
+      <Route path="/tokenExpired" exact>
+        <Home tokenExpired />
+      </Route>
       <Route path="/menu" component={Menu} />
       <Route path="/about" component={About} />
+      <Route path="/login_with_google/:token" component={LoginGoogle} />
       <Route path="/contact" component={Contact} />
       <Route path="/product/:id" component={SingleProduct} />
       <Route path="/two-step-verification/:token" component={TwoStep} />

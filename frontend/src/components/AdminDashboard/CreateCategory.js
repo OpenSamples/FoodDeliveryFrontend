@@ -38,6 +38,7 @@ const CreateCategory = () => {
     const [state, setState] = React.useState({
         name: '',
         image: '',
+        messageUpload: 'Upload photo *',
         popup: false,
         popupInfo: {
 
@@ -54,28 +55,44 @@ const CreateCategory = () => {
     const selectImage = event => {
         setState({
             ...state,
-            image: event.target.files[0]
+            image: event.target.files[0],
+            messageUpload: 'File selected'
         })
     }
 
     const createCategory = async (event) => {
         event.preventDefault()
+        
+        if(!state.image) {
+            setState({
+                ...state,
+                popup: true,
+                popupInfo: {
+                    vertical: 'top',
+                    horizontal: 'center',
+                    color: 'error',
+                    message: 'Please upload an image.'
+                }
+            })
+            return;
+        }
 
         try {
             // Request made to the backend api 
             // Send formData object 
-            // console.log(formData)
+            // console.log(formData)            
+
+            let bodyData = new FormData()
+
+            bodyData.append('imageUrl', state.image)
+            bodyData.append('name', state.name)
+
             let data = await axios({
                 method: 'post',
                 url: "/api/categories", 
-                data: {
-                    upload: state.image,
-                    name: state.name,
-                    imageUrl: './images/categories/2.jpeg'
-                }
-            }); 
-           
-            
+                data: bodyData
+            });
+
             if(data.data._id) {
                 // Category created
                 setState({
@@ -101,6 +118,7 @@ const CreateCategory = () => {
                     }
                 })
             }
+            
         } catch(e) {
             setState({
                 ...state,
@@ -118,7 +136,7 @@ const CreateCategory = () => {
     return (
         <div className={classes.root}>
             <AlertMessage state={state} setState={setState} />
-            <form className={classes.container} onSubmit={createCategory}>
+            <form className={classes.container} onSubmit={createCategory} encType="multipart/form-data">
                 <TextField
                     required
                     name="name"
@@ -132,7 +150,7 @@ const CreateCategory = () => {
                     variant="contained"
                     component="label"
                 >
-                    Upload photo
+                    {state.messageUpload}
                     <input
                         type="file"
                         name="image"

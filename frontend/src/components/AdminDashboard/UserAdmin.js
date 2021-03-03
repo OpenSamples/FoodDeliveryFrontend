@@ -148,8 +148,8 @@ const AdminEditUsers = (props) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {state.users.map((row) => (
-                <TableRow key={row.name}>
+              {state.users.map((row, i) => (
+                <TableRow key={row.name + ' ' + i}>
                   <TableCell component="th" scope="row">
                     {row.firstName}
                   </TableCell>

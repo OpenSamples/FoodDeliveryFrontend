@@ -130,6 +130,7 @@ const ShoppingCart = () => {
     return (
         <>
             <Header />
+            
             <AlertMessage state={state} setState={setState} />
             <div className={classes.root}>
                 <div className={classes.container}>

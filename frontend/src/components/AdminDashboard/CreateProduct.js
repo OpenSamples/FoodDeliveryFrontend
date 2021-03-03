@@ -40,6 +40,7 @@ const CreateProduct = () => {
         detail: '',
         price: '',
         categoryId: '',
+        messageUpload: 'Upload photo *',
         image: '',
         popup: false,
         popupInfo: {
@@ -84,30 +85,48 @@ const CreateProduct = () => {
     const selectImage = event => {
         setState({
             ...state,
-            image: event.target.files[0]
+            image: event.target.files[0],
+            messageUpload: 'File selected'
         })
     }
 
     const createProduct = async (event) => {
         event.preventDefault()
 
+        if(!state.image) {
+            setState({
+                ...state,
+                popup: true,
+                popupInfo: {
+                    vertical: 'top',
+                    horizontal: 'center',
+                    color: 'error',
+                    message: 'Please upload an image.'
+                }
+            })
+            return;
+        }
+
         try {
             // Request made to the backend api 
             // Send formData object 
             // console.log(formData)
+
+            let formDataProduct = new FormData()
+
+            formDataProduct.append('name', state.name)
+            formDataProduct.append('imageUrl', state.image)
+            formDataProduct.append('detail', state.detail)
+            formDataProduct.append('price', +state.price)
+            formDataProduct.append('categoryId', state.categoryId)
+
+
             let data = await axios({
                 method: 'post',
                 url: "/api/products", 
-                data: {
-                    upload: state.image,
-                    name: state.name,
-                    detail: state.detail,
-                    price: +state.price,
-                    categoryId: state.categoryId
-                }
+                data: formDataProduct
             }); 
            
-            
             if(data.data._id) {
                 // Product created
                 setState({
@@ -188,14 +207,14 @@ const CreateProduct = () => {
                         }}
                     >
                         <option aria-label="None" value="" />
-                        {state.categories.map(category => <option value={category._id}>{category.name}</option>)}
+                        {state.categories.map((category, i) => <option key={i + ' ' + category.name} value={category._id}>{category.name}</option>)}
                     </Select>
                 </FormControl>
                 <Button
                     variant="contained"
                     component="label"
                 >
-                    Upload photo
+                    {state.messageUpload}
                     <input
                         type="file"
                         name="image"

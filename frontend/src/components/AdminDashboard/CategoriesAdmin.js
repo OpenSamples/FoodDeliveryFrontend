@@ -137,8 +137,8 @@ export default function AdminEditCategories(props) {
               </TableRow>
             </TableHead>
             <TableBody>
-              {state.categories.map((row) => (
-                <TableRow key={row.name}>
+              {state.categories.map((row, i) => (
+                <TableRow key={row.name + ' ' + i}>
                   <TableCell component="th" scope="row">
                     {row.name}
                   </TableCell>

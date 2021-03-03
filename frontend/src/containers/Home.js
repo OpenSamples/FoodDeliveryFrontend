@@ -100,7 +100,8 @@ const Home = (props) => {
         popupInfo: {
 
         },
-        successPage: true
+        successPage: true,
+        tokenExpired: true
     })
 
 
@@ -117,6 +118,20 @@ const Home = (props) => {
             successPage: false
         })
     }
+
+    if(props.tokenExpired && state.tokenExpired) {
+        setState({
+            ...state,
+            popup: true,
+            popupInfo: {
+                vertical: 'top',
+                horizontal: 'center',
+                color: 'warning',
+                message: 'Token expired!'
+            },
+            tokenExpired: false
+        })
+    }
     
     return (
         <>
@@ -125,15 +140,15 @@ const Home = (props) => {
             <div className={classes.body}>
                 <Carousel className={classes.slider} animation="slide" interval={6000} timeout={1000}>
                     {state.items.map( (item, i) => (
-                        <Link to={"/category/" + item._id}>
+                        <Link key={i + 'aa'} to={"/category/" + item._id}>
                             <ItemCarousel key={i} name={item.name} src={host + item.imageUrl} />
                         </Link>
                     ) )}
                 </Carousel>
                 <Typography className={classes.popular}>Popular products:</Typography>
                 <div className={classes.popularContainer}>
-                    {state.popularProducts.map((item) => (
-                        <Card productId={item._id} image={host + item.imageUrl} alt={item.name} name={item.name} description={item.detail} />
+                    {state.popularProducts.map((item, i) => (
+                        <Card key={i} productId={item._id} image={host + item.imageUrl} alt={item.name} name={item.name} description={item.detail} />
                     ))}
                 </div>
             </div>

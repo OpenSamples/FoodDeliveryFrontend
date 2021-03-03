@@ -117,7 +117,7 @@ const Sidebar = props => {
             <Divider />
             <List>
                 {[{name: 'Statistics', icon: <Equalizer />}, {name: 'Users', icon: <Person />}, {name: 'Categories', icon: <Category />}, {name: 'Products', icon: <Fastfood />}].map((item, index) => (
-                    <Link to={'/admin-dashboard/' + item.name.toLowerCase()} onClick={() => changeBody(item.name.toLowerCase())} className={classes.navItems}>
+                    <Link key={index} to={'/admin-dashboard/' + item.name.toLowerCase()} onClick={() => changeBody(item.name.toLowerCase())} className={classes.navItems}>
                         <ListItem button key={item.name}>
                                 <ListItemIcon className={classes.colorWhite}>{item.icon}</ListItemIcon>
                                 <ListItemText primary={item.name} />
