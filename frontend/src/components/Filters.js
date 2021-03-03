@@ -115,16 +115,16 @@ const Filters = (props) => {
                 })
             }
         } catch(e) {
-            setState({
-                ...state,
-                popup: true,
-                popupInfo: {
-                    vertical: 'top',
-                    horizontal: 'center',
-                    color: 'error',
-                    message: 'Failed to fetch categories'
-                }
-            })
+            // setState({
+            //     ...state,
+            //     popup: true,
+            //     popupInfo: {
+            //         vertical: 'top',
+            //         horizontal: 'center',
+            //         color: 'error',
+            //         message: 'Failed to fetch categories'
+            //     }
+            // })
         }
     }, [])
 

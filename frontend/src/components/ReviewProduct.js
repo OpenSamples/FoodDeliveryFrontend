@@ -77,15 +77,15 @@ const ReviewProduct = (props) => {
         } catch(e) {
             props.setState({
                 ...props.state,
-                popup: true,
+                // popup: true,
                 productIdForReview: '',
                 dialogOpen: false,
-                popupInfo: {
-                    vertical: 'top',
-                    horizontal: 'center',
-                    color: 'error',
-                    message: 'Something went wrong...'
-                }
+                // popupInfo: {
+                //     vertical: 'top',
+                //     horizontal: 'center',
+                //     color: 'error',
+                //     message: 'Something went wrong...'
+                // }
             })
         }
         

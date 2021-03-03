@@ -116,16 +116,16 @@ const PlaceOrder = (props) => {
                 })
             }
         } catch(e) {
-            setState({
-                ...state,
-                popup: true,
-                popupInfo: {
-                    vertical: 'top',
-                    horizontal: 'center',
-                    color: 'error',
-                    message: 'Something went wrong while fetching shopping cart items...'
-                }
-            })
+            // setState({
+            //     ...state,
+            //     popup: true,
+            //     popupInfo: {
+            //         vertical: 'top',
+            //         horizontal: 'center',
+            //         color: 'error',
+            //         message: 'Something went wrong while fetching shopping cart items...'
+            //     }
+            // })
         }
 
     }, [])
@@ -184,17 +184,17 @@ const PlaceOrder = (props) => {
                 props.history.push('/ordersHistory/success')
             }
         } catch(e) {
-            console.log(e)
-            setState({
-                ...state,
-                popup: true,
-                popupInfo: {
-                    vertical: 'top',
-                    horizontal: 'center',
-                    color: 'error',
-                    message: 'Something went wrong...'
-                }
-            })
+            // console.log(e)
+            // setState({
+            //     ...state,
+            //     popup: true,
+            //     popupInfo: {
+            //         vertical: 'top',
+            //         horizontal: 'center',
+            //         color: 'error',
+            //         message: 'Something went wrong...'
+            //     }
+            // })
         }
 
 

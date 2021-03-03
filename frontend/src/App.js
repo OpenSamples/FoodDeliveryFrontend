@@ -20,12 +20,50 @@ import ResetPassword from "./containers/ResetPassword";
 import OrdersHistory from './containers/OrdersHistory'
 import ChangePassword from './containers/ChangePassword'
 import LoginGoogle from './containers/LoginGoogle'
+import { host } from './config/config'
+import AlertMessage from './components/AlertMessage'
+
 
 function App() {
   const dispatch = useDispatch()
+  
+  const [alert, setAlert] = React.useState({
+    popup: false,
+    popupInfo: {
+      
+    }
+  })
 
-  axios.defaults.baseURL = 'https://api-food-delivery.dinno.dev/';
+  axios.defaults.baseURL = host;
   axios.defaults.headers.common['Authorization'] = `Bearer ${useSelector(state => state.user.token)}`
+  axios.interceptors.response.use(undefined, function (error) {
+    if(error.response.data.message && error.response.data.message === 'Token is not valid!') {
+      setAlert({
+        ...alert,
+        popup: true,
+        popupInfo: {
+          vertical: 'top',
+          horizontal: 'center',
+          color: 'warning',
+          message: 'Please login!'
+        }
+      })
+      return Promise.reject(error);
+    } else if (error.response.status > 299) {
+      setAlert({
+        ...alert,
+        popup: true,
+        popupInfo: {
+          vertical: 'top',
+          horizontal: 'center',
+          color: 'error',
+          message: 'Something went wrong...'
+        }
+      })
+      return Promise.reject(error);
+    }
+  });
+
 
   const [userDate, setUserData] = React.useState(useSelector(state => state.user))
   const [checkTokenExpired, setTokenCheck] = React.useState(true)
@@ -71,6 +109,7 @@ function App() {
 
   return (
     <>
+      <AlertMessage state={alert} setState={setAlert} />
       <Route path="/" exact component={Home} />
       <Route path="/success" exact>
         <Home success />

@@ -2,16 +2,11 @@ import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Link } from 'react-router-dom'
 import DeleteIcon from '@material-ui/icons/Delete';
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import Paper from "@material-ui/core/Paper";
-import { Button, Typography } from "@material-ui/core";
+import { IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, Typography } from '@material-ui/core'
 import axios from 'axios'
 import AlertMessage from '../AlertMessage'
+import CheckBoxIcon from '@material-ui/icons/CheckBox';
+import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 
 const useStyles = makeStyles(() => ({
   body: {
@@ -30,6 +25,9 @@ const useStyles = makeStyles(() => ({
     display: 'flex',
     justifyContent: 'space-between',
     marginBottom: '10px'
+  },
+  colorGreen: {
+    color: 'green'
   }
 }));
 
@@ -59,16 +57,16 @@ const AdminEditUsers = (props) => {
         })
       }
     } catch(e) {
-      setState({
-        ...state,
-        popup: true,
-        popupInfo: {
-          vertical: 'top',
-          horizontal: 'center',
-          color: 'error',
-          message: 'Something went wrong while fetching users...'
-        }
-      })
+      // setState({
+      //   ...state,
+      //   popup: true,
+      //   popupInfo: {
+      //     vertical: 'top',
+      //     horizontal: 'center',
+      //     color: 'error',
+      //     message: 'Something went wrong while fetching users...'
+      //   }
+      // })
     }
 
   }, [])
@@ -107,16 +105,16 @@ const AdminEditUsers = (props) => {
       }
 
     } catch(e) {
-      setState({
-        ...state,
-        popup: true,
-        popupInfo: {
-          vertical: 'top',
-          horizontal: 'center',
-          color: 'error',
-          message: 'Something went wrong while deleting user...'
-        }
-      })
+      // setState({
+      //   ...state,
+      //   popup: true,
+      //   popupInfo: {
+      //     vertical: 'top',
+      //     horizontal: 'center',
+      //     color: 'error',
+      //     message: 'Something went wrong while deleting user...'
+      //   }
+      // })
     }
   }
 
@@ -125,6 +123,65 @@ const AdminEditUsers = (props) => {
       ...props.state, 
       page: 'create-user'
     })
+  }
+
+
+  const updateRole = async (id, role) => {
+    try {
+      let updatedUser = await axios({
+        method: 'post',
+        url: '/api/users/role/change',
+        data: {
+          id,
+          role: !role
+        }
+      })
+
+
+      if(updatedUser.data._id) {
+        // updated
+
+        setState({
+          ...state,
+          popup: true,
+          users: state.users.map(user => {
+            if(user._id === id) {
+              user.role = !role
+            }
+            return user
+          }),
+          popupInfo: {
+            vertical: 'top',
+            horizontal: 'center',
+            color: 'success',
+            message: 'Successfully'
+          }
+        })
+      } else {
+        setState({
+          ...state,
+          popup: true,
+          popupInfo: {
+            vertical: 'top',
+            horizontal: 'center',
+            color: 'error',
+            message: 'Something went wrong...'
+          }
+        })
+      }
+    } catch(e) {
+      // console.log(e)
+      // setState({
+      //   ...state,
+      //   popup: true,
+      //   popupInfo: {
+      //     vertical: 'top',
+      //     horizontal: 'center',
+      //     color: 'error',
+      //     message: 'Something went wrong...'
+      //   }
+      // })
+    }
   }
 
   return (
@@ -145,6 +202,7 @@ const AdminEditUsers = (props) => {
                 <TableCell align="right">Last Name</TableCell>
                 <TableCell align="right">Email</TableCell>
                 <TableCell align="right">Email is Verified</TableCell>
+                <TableCell align="right">Admin</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -156,6 +214,16 @@ const AdminEditUsers = (props) => {
                   <TableCell align="right">{row.lastName}</TableCell>
                   <TableCell align="right">{row.email}</TableCell>
                   <TableCell align="right">{'' + !!row.email_is_verified}</TableCell>
+
+                  <TableCell align="right" className={row.role ? classes.colorGreen : ''}>
+                    <IconButton color="inherit" onClick={ () => updateRole(row._id, row.role)}>
+                      {row.role ? 
+                        <CheckBoxIcon /> :
+                        <CheckBoxOutlineBlankIcon />
+                      }
+                    </IconButton>
+                  </TableCell>
+
                   <TableCell align="right">
                     <Button
                       onClick={() => deleteUser(row._id)}

@@ -114,16 +114,16 @@ const TwoStep = (props) => {
             }
         } catch(e) {
 
-            setState({
-                ...state,
-                popup: true,
-                popupInfo: {
-                    horizontal: 'center',
-                    vertical: 'top',
-                    color: 'error',
-                    message: 'Something went wrong...'
-                }
-            })
+            // setState({
+            //     ...state,
+            //     popup: true,
+            //     popupInfo: {
+            //         horizontal: 'center',
+            //         vertical: 'top',
+            //         color: 'error',
+            //         message: 'Something went wrong...'
+            //     }
+            // })
         }
 
         

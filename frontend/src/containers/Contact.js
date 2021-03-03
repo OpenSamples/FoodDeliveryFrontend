@@ -132,16 +132,16 @@ const Contact = () => {
                 })
             }
         } catch(e) {
-            setState({
-                ...state,
-                popup: true,
-                popupInfo: {
-                    vertical: 'top',
-                    horizontal: 'center',
-                    color: 'error',
-                    message: 'Something went wrong...'
-                }
-            })
+            // setState({
+            //     ...state,
+            //     popup: true,
+            //     popupInfo: {
+            //         vertical: 'top',
+            //         horizontal: 'center',
+            //         color: 'error',
+            //         message: 'Something went wrong...'
+            //     }
+            // })
         }
     }
 

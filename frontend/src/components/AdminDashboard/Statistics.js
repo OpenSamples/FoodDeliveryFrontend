@@ -56,7 +56,7 @@ export default function AdminStatistics() {
       if(statisticsData.data.message && statisticsData.data.message === 'Successfully') {
         setState({
           ...state,
-          message: statisticsData.data.data.mostProfitableWeekday.length && statisticsData.data.data.mostProductsCategory.length && statisticsData.data.data.bestSelling.length ? '' : 'No statistics, please add some products :-)',
+          message: statisticsData.data.data.mostProfitableWeekday.length || statisticsData.data.data.mostProductsCategory.length || statisticsData.data.data.bestSelling.length ? '' : 'No statistics, please add some products :-)',
           bestSelling: statisticsData.data.data.bestSelling || [],
           mostProductsCategory: statisticsData.data.data.mostProductsCategory || [],
           mostProfitableWeekday: statisticsData.data.data.mostProfitableWeekday || []
@@ -77,14 +77,14 @@ export default function AdminStatistics() {
     } catch(e) {
       setState({
         ...state,
-        popup: true,
+        // popup: true,
         message: '',
-        popupInfo: {
-          vertical: 'top',
-          horizontal: 'center',
-          color: 'error',
-          message: 'Something went wrong...'
-        }
+        // popupInfo: {
+        //   vertical: 'top',
+        //   horizontal: 'center',
+        //   color: 'error',
+        //   message: 'Something went wrong...'
+        // }
       })
     }
   }, [])

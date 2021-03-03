@@ -5,7 +5,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import contactUsEmail from '../assets/email.png'
 import { TextField, Button, Typography } from '@material-ui/core';
 import CardAboutUs from '../components/CardAboutUs'
-
+import dinno from '../assets/dinno.jpg'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -25,8 +25,11 @@ const useStyles = makeStyles((theme) => ({
     about_us_cards: {
         padding: "30px",
         display: "flex",
-        flexDirection: "row",
-        justifyContent: "space-around"
+        // flexDirection: "row",
+        flexWrap: 'wrap',
+        // gap: 3,
+        justifyContent: "space-around",
+        // height: '445px'
     }
 }));
 
@@ -43,7 +46,20 @@ const About = () => {
                 <div className={classes.about_us_cards}>
                     <CardAboutUs init="NJ" fullName="Nikola Jovovic" location="Podgorica,Montenegro" desc="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s" />
                     <CardAboutUs init="IB" fullName="Ivana Bjelobaba" location="Podgorica,Montenegro" desc="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s" />
-                    <CardAboutUs init="DK" fullName="Dino Karahmetovic" location="Podgorica,Montenegro" desc="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s" />
+                    <CardAboutUs
+                        avatar={dinno} 
+                        github="https://github.com/dinno-invis1ble" 
+                        instagram="https://www.instagram.com/_d1noo_/" 
+                        linkedin="https://www.linkedin.com/in/dinno-invis1ble/" 
+                        init="DK" fullName="Dino Karahmetovic" 
+                        location="Bijelo Polje, Montenegro" 
+                        desc="I am Middle Web Developer (MERN, MEVN) with 1-2 years 
+                            of experience in developing custom web 
+                            applications using technologies like NodeJS, ReactJS and Vue.js. 
+                            I am constantly improving my coding 
+                            skills and I enjoy learning new technologies. 
+                            I always follow best practices and industry standards in writing code." 
+                    />
                 </div>
             </div>
             <Footer />

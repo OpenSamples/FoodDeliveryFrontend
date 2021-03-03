@@ -41,7 +41,7 @@ const CardComponent = (props) => {
                 }
             })
     
-            if(productCart.data.msg.startsWith('Product added to cart that belongs to user:')) {
+            if(productCart.data.msg && productCart.data.msg.startsWith('Product added to cart that belongs to user:')) {
                 // Product is successfully added to cart
                 setState({
                     ...state,
@@ -55,16 +55,16 @@ const CardComponent = (props) => {
                 })
             }
         } catch(e) {
-            setState({
-                ...state,
-                popup: true,
-                popupInfo: {
-                    vertical: 'top',
-                    horizontal: 'center',
-                    color: 'error',
-                    message: 'Failed to add product to cart!'
-                }
-            })
+            // setState({
+            //     ...state,
+            //     popup: true,
+            //     popupInfo: {
+            //         vertical: 'top',
+            //         horizontal: 'center',
+            //         color: 'error',
+            //         message: 'Failed to add product to cart!'
+            //     }
+            // })
         }
     }
 
@@ -78,7 +78,7 @@ const CardComponent = (props) => {
                         image={props.image}
                         title={props.alt}
                     />
-                    <CardContent>
+                    <CardContent style={{height: '120px', marginBottom: '10px', overflow: 'hidden'}}>
                         <Typography gutterBottom variant="h5" component="h2">
                             {props.name}
                         </Typography>

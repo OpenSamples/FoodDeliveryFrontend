@@ -64,16 +64,16 @@ const CardOrder = (props) => {
             }
 
         } catch(e) {
-            props.setState({
-                ...props.state,
-                popup: true,
-                popupInfo: {
-                    vertical: 'top',
-                    horizontal: 'center',
-                    color: 'error',
-                    message: 'Failed to remove product from cart'
-                }
-            })
+            // props.setState({
+            //     ...props.state,
+            //     popup: true,
+            //     popupInfo: {
+            //         vertical: 'top',
+            //         horizontal: 'center',
+            //         color: 'error',
+            //         message: 'Failed to remove product from cart'
+            //     }
+            // })
         }
     }
 

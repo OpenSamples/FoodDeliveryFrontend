@@ -105,13 +105,13 @@ const Categories = (props) => {
             setState({
                 ...state,
                 msg: 'Something went wrong...',
-                popup: true,
-                popupInfo: {
-                    vertical: 'top',
-                    horizontal: 'center',
-                    color: 'error',
-                    message: 'Something went wrong...'
-                }
+                // popup: true,
+                // popupInfo: {
+                //     vertical: 'top',
+                //     horizontal: 'center',
+                //     color: 'error',
+                //     message: 'Something went wrong...'
+                // }
             })
         }
     }, [])       

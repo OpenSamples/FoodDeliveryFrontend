@@ -62,16 +62,16 @@ const CreateProduct = () => {
                 })
             }
         } catch(e) {
-            setState({
-                ...state,
-                popup: true,
-                popupInfo: {
-                    vertical: 'top',
-                    horizontal: 'center',
-                    color: 'error',
-                    message: 'Something went wrong while fetching categories...'
-                }
-            })
+            // setState({
+            //     ...state,
+            //     popup: true,
+            //     popupInfo: {
+            //         vertical: 'top',
+            //         horizontal: 'center',
+            //         color: 'error',
+            //         message: 'Something went wrong while fetching categories...'
+            //     }
+            // })
         }
     }, [])
 
@@ -153,16 +153,16 @@ const CreateProduct = () => {
                 })
             }
         } catch(e) {
-            setState({
-                ...state,
-                popup: true,
-                popupInfo: {
-                    vertical: 'top',
-                    horizontal: 'center',
-                    color: 'error',
-                    message: 'Something went wrong...'
-                }
-            })
+            // setState({
+            //     ...state,
+            //     popup: true,
+            //     popupInfo: {
+            //         vertical: 'top',
+            //         horizontal: 'center',
+            //         color: 'error',
+            //         message: 'Something went wrong...'
+            //     }
+            // })
         }
     }
 

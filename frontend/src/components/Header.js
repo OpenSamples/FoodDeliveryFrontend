@@ -6,7 +6,7 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import PersonIcon from '@material-ui/icons/Person';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
-import logo from '../assets/logo.png';
+// import logo from '../assets/logo.png';
 import { useDispatch, useSelector } from 'react-redux'
 import { logout as logoutAction } from '../store/actions'
 
@@ -179,7 +179,8 @@ const Header = (props) => {
     return (
         <AppBar position="static">
             <Toolbar className={classes.root}>
-                <img src={logo} alt="logo" className={classes.logo} />
+                {/* <img src={logo} alt="logo" className={classes.logo} /> */}
+                <div></div>
                 <div>
                     {/* rute */}
                     <div className={classes.navigation}>

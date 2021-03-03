@@ -122,16 +122,16 @@ const SingleProduct = (props) => {
                 allComments
             }
         } catch(e) {
-            setState({
-                ...state,
-                popup: true,
-                popupInfo: {
-                    vertical: 'top',
-                    horizontal: 'center',
-                    color: 'error',
-                    message: 'Something went wrong while fetching reviews and comments...'
-                }
-            })
+            // setState({
+            //     ...state,
+            //     popup: true,
+            //     popupInfo: {
+            //         vertical: 'top',
+            //         horizontal: 'center',
+            //         color: 'error',
+            //         message: 'Something went wrong while fetching reviews and comments...'
+            //     }
+            // })
             return {
                 averageReview: -1,
                 allComments: []
@@ -183,14 +183,14 @@ const SingleProduct = (props) => {
 
             setState({
                 ...state,
-                popup: true,
+                // popup: true,
                 loadingMessage: '',
-                popupInfo: {
-                    vertical: 'top',
-                    horizontal: 'center',
-                    color: 'error',
-                    message: 'Something went wrong...'
-                }
+                // popupInfo: {
+                //     vertical: 'top',
+                //     horizontal: 'center',
+                //     color: 'error',
+                //     message: 'Something went wrong...'
+                // }
             })
         }
         
@@ -235,16 +235,16 @@ const SingleProduct = (props) => {
                 
             }
         } catch(e) {
-            setState({
-                ...state,
-                popup: true,
-                popupInfo: {
-                    vertical: 'top',
-                    horizontal: 'center',
-                    color: 'error',
-                    message: 'Failed to add product to cart!'
-                }
-            })
+            // setState({
+            //     ...state,
+            //     popup: true,
+            //     popupInfo: {
+            //         vertical: 'top',
+            //         horizontal: 'center',
+            //         color: 'error',
+            //         message: 'Failed to add product to cart!'
+            //     }
+            // })
         }
     }
 

@@ -66,16 +66,16 @@ export default function AdminEditProducts(props) {
         })
       }
     } catch(e) {
-      setState({
-        ...state,
-        popup: true,
-        popupInfo: {
-          vertical: 'top',
-          horizontal: 'center',
-          color: 'error',
-          message: 'Something went wrong while fetching products...'
-        }
-      })
+      // setState({
+      //   ...state,
+      //   popup: true,
+      //   popupInfo: {
+      //     vertical: 'top',
+      //     horizontal: 'center',
+      //     color: 'error',
+      //     message: 'Something went wrong while fetching products...'
+      //   }
+      // })
     }
   }, [])
 
@@ -102,16 +102,16 @@ export default function AdminEditProducts(props) {
       }
 
     } catch(e) {
-      setState({
-        ...state,
-        popup: true,
-        popupInfo: {
-          vertical: 'top',
-          horizontal: 'center',
-          color: 'error',
-          message: 'Something went wrong while deleting product...'
-        }
-      })
+      // setState({
+      //   ...state,
+      //   popup: true,
+      //   popupInfo: {
+      //     vertical: 'top',
+      //     horizontal: 'center',
+      //     color: 'error',
+      //     message: 'Something went wrong while deleting product...'
+      //   }
+      // })
     }
   }
 
@@ -162,16 +162,16 @@ export default function AdminEditProducts(props) {
         })
       }
     } catch(e) {
-      setState({
-        ...state,
-        popup: true,
-        popupInfo: {
-          vertical: 'top',
-          horizontal: 'center',
-          color: 'error',
-          message: 'Something went wrong...'
-        }
-      })
+      // setState({
+      //   ...state,
+      //   popup: true,
+      //   popupInfo: {
+      //     vertical: 'top',
+      //     horizontal: 'center',
+      //     color: 'error',
+      //     message: 'Something went wrong...'
+      //   }
+      // })
     }
   }
 
