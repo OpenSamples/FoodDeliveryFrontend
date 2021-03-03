@@ -41,11 +41,12 @@ const useStyles = makeStyles(() => ({
     price: {
         color: '#388e3c',
         height: '10%',
-        margin: '2% 0'
+        margin: '1% 0 2%'
     },
     thumbnail: {
         maxHeight: '100px',
-        marginLeft: '20px'
+        marginLeft: '20px',
+        width: '180px'
     },
     descriptionDetail: {
         height: '70%',

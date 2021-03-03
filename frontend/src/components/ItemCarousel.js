@@ -23,9 +23,11 @@ const useStyles = makeStyles(() => ({
     paper: {
         width: '100%',
         height: '18.6vw',
-        maxHeight: '330px',
         display: 'flex',
         alignItems: 'center'
+    },
+    home: {
+        maxHeight: '330px'
     }
 }))
 
@@ -33,9 +35,9 @@ const Item = (props) => {
     const classes = useStyles()
 
     const classNames = props.singlePage ? classes.singlePage : classes.photo
-
+    const paper = props.singlePage ? [classes.paper] : [classes.home, classes.paper]
     return (
-        <Paper className={classes.paper}>
+        <Paper className={paper.join(' ')}>
             <Link to={props.to} style={{width: '100%'}}>
                 <Button className={classes.button}>
                     <img src={props.src} alt={props.name} className={classNames} />

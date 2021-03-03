@@ -85,6 +85,7 @@ const PlaceOrder = (props) => {
         category: '',
         // qty: 3,
         // itemsInCart: items.length,
+        orderTotal: 0,
         items: useSelector(state => state.itemsInCart),
         address: useSelector(state => state.user.addresses[0] || ''),
         phone: '',
@@ -102,7 +103,7 @@ const PlaceOrder = (props) => {
             let data = await axios({
                 method: 'get',
                 url: '/api/shopping-cart-items'
-            })
+            })            
 
             if(!data.data || data.data.error) {
                 setState({
@@ -110,9 +111,14 @@ const PlaceOrder = (props) => {
                     items: []
                 })
             } else {
+                let orderTotal = 0
+                data.data.forEach(el => {
+                    orderTotal += el.qty * el.price
+                })
                 setState({
                     ...state,
-                    items: [...data.data]
+                    items: [...data.data],
+                    orderTotal
                 })
             }
         } catch(e) {
@@ -210,7 +216,7 @@ const PlaceOrder = (props) => {
                     {itemsCards()}
                 </div>
                 <form className={classes.container}>
-                    <h3 className={classes.totalPrice}>Total price: <span>$3000</span></h3>
+                    <h3 className={classes.totalPrice}>Total price: <span>${state.orderTotal}</span></h3>
                     <FormControl className={classes.formControl}>
                         <InputLabel htmlFor="categories">Payment option</InputLabel>
                         <Select

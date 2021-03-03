@@ -136,8 +136,13 @@ const ShoppingCart = () => {
                 <div className={classes.container}>
                     <h2>{title}</h2>
                     {itemsCards()}
-                    <Link to="/place-order" className={classes.placeOrderBtn}>
-                        <Button disabled={state.itemsInCart ? false : true} variant="outlined" color="primary">Place order</Button>
+                    <Link to={ state.items.length ? "/place-order" : '#'} className={classes.placeOrderBtn}>
+                        <Button 
+                                disabled={state.items.length ? false : true} 
+                                variant="outlined" 
+                                color="primary"> 
+                            Place order 
+                        </Button>
                     </Link>
                 </div>
             </div>

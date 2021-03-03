@@ -168,7 +168,7 @@ export default function BasicTable(props) {
                         <TableRow className={classes.tableRow}>
                             <TableCell className={classes.title}>Orders History</TableCell>
                             <TableCell align="right" className={classes.title2}>Order Date</TableCell>
-                            <TableCell align="right" className={classes.title2}>Total Price &euro;</TableCell>
+                            <TableCell align="right" className={classes.title2}>Total Price</TableCell>
                             <TableCell align="right" className={classes.title2}>Address</TableCell>
                             <TableCell align="right" className={classes.title2}>Is Completed</TableCell>
                         </TableRow>
@@ -180,7 +180,7 @@ export default function BasicTable(props) {
                                     {row.fullName}
                                 </TableCell>
                                 <TableCell align="right" className={classes.tableData}>{row.orderPlaced.slice(0, 10)}</TableCell>
-                                <TableCell align="right" className={classes.tableData} style={{color: 'white'}}>{row.orderTotal}</TableCell>
+                                <TableCell align="right" className={classes.tableData} style={{color: 'white'}}>${row.orderTotal}</TableCell>
                                 <TableCell align="right" className={classes.tableData}>{row.address}</TableCell>
                                 {row.isOrderCompleted ? 
                                     <TableCell align="right" className={classes.tableData} style={{color: 'green'}}>Completed</TableCell> :
